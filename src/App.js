@@ -1,4 +1,3 @@
-import { Contact } from "lucide-react";
 import { useEffect, useState } from "react";
 import "./App.css";
 import AboutUs from "./components/AboutUs";
