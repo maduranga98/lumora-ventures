@@ -1,5 +1,24 @@
 import React, { useState } from "react";
-import { Mail, Phone, Send } from "lucide-react";
+import { Mail, Phone, Send, X } from "lucide-react";
+import emailjs from "@emailjs/browser";
+
+const AlertDialog = ({ message, type, onClose }) => (
+  <div
+    className={`mb-6 p-4 rounded-lg flex items-center justify-between ${
+      type === "error"
+        ? "bg-red-50 text-red-700 border border-red-200"
+        : "bg-green-50 text-green-700 border border-green-200"
+    }`}
+  >
+    <span>{message}</span>
+    <button
+      onClick={onClose}
+      className="ml-2 hover:opacity-70 transition-opacity"
+    >
+      <X className="h-4 w-4" />
+    </button>
+  </div>
+);
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -9,9 +28,54 @@ const ContactUs = () => {
     message: "",
   });
 
-  const handleSubmit = (e) => {
+  const [status, setStatus] = useState({
+    type: "",
+    message: "",
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
+    setIsSubmitting(true);
+
+    try {
+      const result = await emailjs.send(
+        process.env.REACT_APP_EMAILJS_SERVICE_ID,
+        process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+          to_email: "info@lumoraventures.com",
+        },
+        process.env.REACT_APP_EMAILJS_PUBLIC_KEY
+      );
+
+      if (result.status === 200) {
+        setStatus({
+          type: "success",
+          message: "Thank you! Your message has been sent successfully.",
+        });
+
+        // Clear form
+        setFormData({
+          name: "",
+          email: "",
+          subject: "",
+          message: "",
+        });
+      }
+    } catch (error) {
+      setStatus({
+        type: "error",
+        message:
+          "Sorry, there was an error sending your message. Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -27,7 +91,8 @@ const ContactUs = () => {
       text: "info@lumoraventures.com",
       href: "mailto:info@lumoraventures.com",
     },
-    { icon: Phone, text: "+1-800-123-4567", href: "tel:+18001234567" },
+    { icon: Phone, text: "+94-71-999-8500", href: "tel:+94719998500" },
+    { icon: Phone, text: "+94-76-620-6555", href: "tel:+94766206555" },
   ];
 
   const renderInput = (label, name, type = "text", rows) => (
@@ -71,6 +136,14 @@ const ContactUs = () => {
           </p>
         </div>
 
+        {status.message && (
+          <AlertDialog
+            message={status.message}
+            type={status.type}
+            onClose={() => setStatus({ type: "", message: "" })}
+          />
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Contact Information */}
           <div className="lg:col-span-1 space-y-8 animate-on-scroll opacity-0 -translate-x-8">
@@ -108,10 +181,11 @@ const ContactUs = () => {
 
                 <button
                   type="submit"
-                  className="group w-full flex items-center justify-center py-3 px-4 rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transform hover:scale-105 transition-all duration-300"
+                  disabled={isSubmitting}
+                  className="group w-full flex items-center justify-center py-3 px-4 rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Send className="h-5 w-5 mr-2 group-hover:translate-x-1 transition-transform" />
-                  Send Your Inquiry
+                  {isSubmitting ? "Sending..." : "Submit"}
                 </button>
               </form>
             </div>
