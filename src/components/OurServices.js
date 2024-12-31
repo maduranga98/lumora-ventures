@@ -60,7 +60,6 @@ const Services = ({ onNavClick }) => {
     setActiveTab(key);
     setTimeout(() => setIsAnimating(false), 300);
   };
-
   return (
     <div className="bg-gradient-to-b from-white to-gray-50 py-16 lg:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -95,16 +94,19 @@ const Services = ({ onNavClick }) => {
         </div>
 
         {/* Service Content */}
+        {/* Service Content */}
         <div className="mt-16">
           {Object.entries(services).map(([key, service]) => (
             <div
               key={key}
               className={`transition-all duration-300 transform 
-                ${
-                  activeTab === key
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-4 hidden"
-                }`}
+        ${
+          activeTab === key
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 translate-y-4 hidden"
+        }
+        ${isAnimating ? "animate-pulse" : ""}
+      `}
             >
               <div className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300 p-8">
                 <div className="max-w-3xl mx-auto animate-on-scroll opacity-0 translate-y-8">
