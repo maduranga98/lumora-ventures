@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { ArrowRight } from "lucide-react";
+import heroImage from "../assets/hero-image.png";
 
 const Hero = ({ onNavClick }) => {
   useEffect(() => {
@@ -53,14 +54,18 @@ const Hero = ({ onNavClick }) => {
           </div>
 
           <div className="relative animate-on-scroll opacity-0 translate-x-8 transition-all duration-1000 ease-out">
-            <div className="relative mx-auto max-w-3xl">
-              <div className="w-full aspect-video rounded-xl shadow-2xl ring-1 ring-black/5 overflow-hidden transform hover:scale-105 transition-transform duration-500">
+            <div className="relative mx-auto max-w-lg">
+              <div className="w-full h-64 bg-gray-900 md:h-72 lg:h-80 rounded-xl shadow-2xl ring-1 ring-white/10 overflow-hidden transform hover:scale-105 transition-transform duration-500">
                 <img
-                  src="/api/placeholder/600/400"
-                  alt="Hero"
-                  className="w-full h-full object-cover"
+                  src={heroImage}
+                  alt="Lumora Services Diagram"
+                  className="w-full h-full object-contain p-4"
+                  style={{
+                    maxWidth: "600px",
+                    maxHeight: "480px",
+                    margin: "0 auto",
+                  }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-tr from-indigo-600/20 to-transparent" />
               </div>
             </div>
           </div>
