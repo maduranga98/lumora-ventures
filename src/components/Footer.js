@@ -12,9 +12,7 @@ const Footer = ({ onNavClick }) => {
     ],
     Legal: [
       { name: "Privacy Policy", id: "privacy" },
-      { name: "Terms & Conditions", id: "terms" },
-      { name: "Shipping Policy", id: "shipping" },
-      { name: "Return & Refund Policy", id: "refund" },
+      { name: "Terms & Conditions", id: "terms" }, // This should match
     ],
   };
 
