@@ -1,4 +1,10 @@
 import React, { useEffect, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import "./index.css";
 import "./App.css";
 import AboutUs from "./components/AboutUs";
@@ -9,6 +15,34 @@ import Overview from "./components/Overview";
 import Packages from "./components/Packages";
 import Footer from "./components/Footer";
 import ContactUs from "./components/Contact";
+import PrivacyPolicy from "./components/PrivacyPolicy";
+import TermsAndConditions from "./components/TermAndConditions"; // Add this import
+
+// Main content component remains the same
+const MainContent = ({ activeSection, scrollToSection }) => {
+  return (
+    <>
+      <section id="home">
+        <Hero onNavClick={scrollToSection} />
+      </section>
+      <section id="overview">
+        <Overview onNavClick={scrollToSection} />
+      </section>
+      <section id="about">
+        <AboutUs onNavClick={scrollToSection} />
+      </section>
+      <section id="packages">
+        <Packages onNavClick={scrollToSection} />
+      </section>
+      <section id="services">
+        <Services onNavClick={scrollToSection} />
+      </section>
+      <section id="contact">
+        <ContactUs onNavClick={scrollToSection} />
+      </section>
+    </>
+  );
+};
 
 function App() {
   const [activeSection, setActiveSection] = useState("");
@@ -34,6 +68,16 @@ function App() {
   }, []);
 
   const scrollToSection = (sectionId) => {
+    // Add terms-conditions handling
+    if (sectionId === "privacy") {
+      window.location.href = "/privacy-policy";
+      return;
+    }
+    if (sectionId === "terms") {
+      window.location.href = "/terms-conditions";
+      return;
+    }
+
     const element = document.getElementById(sectionId);
     if (element) {
       const offset = 80; // Navbar height
@@ -46,28 +90,25 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <Navbar activeSection={activeSection} onNavClick={scrollToSection} />
-      <section id="home">
-        <Hero onNavClick={scrollToSection} />
-      </section>
-      <section id="overview">
-        <Overview onNavClick={scrollToSection} />
-      </section>
-      <section id="about">
-        <AboutUs onNavClick={scrollToSection} />
-      </section>
-      <section id="packages">
-        <Packages onNavClick={scrollToSection} />
-      </section>
-      <section id="services">
-        <Services onNavClick={scrollToSection} />
-      </section>
-      <section id="contact">
-        <ContactUs onNavClick={scrollToSection} />
-      </section>
-      <Footer onNavClick={scrollToSection} />
-    </div>
+    <Router>
+      <div className="App">
+        <Navbar activeSection={activeSection} onNavClick={scrollToSection} />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <MainContent
+                activeSection={activeSection}
+                scrollToSection={scrollToSection}
+              />
+            }
+          />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-conditions" element={<TermsAndConditions />} />
+        </Routes>
+        <Footer onNavClick={scrollToSection} />
+      </div>
+    </Router>
   );
 }
 
