@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Menu, X } from "lucide-react";
-
+import logo from "../assets/logo.png";
 const Navbar = ({ activeSection, onNavClick }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -25,7 +25,11 @@ const Navbar = ({ activeSection, onNavClick }) => {
             className="flex items-center cursor-pointer"
             onClick={() => handleNavClick("home")}
           >
-            <span className="text-2xl font-bold text-indigo-600">Lumora</span>
+            <img
+              src={logo}
+              alt="Lumora Logo"
+              className="h-20 w-auto object-contain"
+            />
           </div>
 
           {/* Desktop Menu */}
