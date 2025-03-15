@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import { useTheme } from "../Theme";
 import { CheckCircle, AlertCircle, Loader } from "lucide-react";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  serverTimestamp,
-} from "firebase/firestore";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { db, functions } from "../../firebase";

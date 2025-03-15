@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Menu, X, ChevronUp } from "lucide-react";
 import Header from "./Header";
@@ -17,16 +17,19 @@ const GmbPage = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
-  // Navigation items
-  const navItems = [
-    { id: "home", label: "Home" },
-    { id: "whatIsGBP", label: "About GBP" },
-    { id: "whyGBP", label: "Why It Matters" },
-    { id: "whyChoose", label: "Why Choose Us" },
-    { id: "packages", label: "Services" },
-    { id: "faq", label: "FAQ" },
-    { id: "contact", label: "Contact" },
-  ];
+  // Navigation items - wrapped in useMemo to prevent recreation on every render
+  const navItems = useMemo(
+    () => [
+      { id: "home", label: "Home" },
+      { id: "whatIsGBP", label: "About GBP" },
+      { id: "whyGBP", label: "Why It Matters" },
+      { id: "whyChoose", label: "Why Choose Us" },
+      { id: "packages", label: "Services" },
+      { id: "faq", label: "FAQ" },
+      { id: "contact", label: "Contact" },
+    ],
+    []
+  );
 
   // Handle scroll events
   useEffect(() => {

@@ -8,7 +8,6 @@ import {
   CheckCircle,
   Star,
   Clock,
-  Globe,
   HelpCircle,
 } from "lucide-react";
 import CheckoutForm from "./CheckoutForm";

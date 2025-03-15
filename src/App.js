@@ -80,10 +80,6 @@ const Layout = ({ children }) => {
   const [lastScrollY, setLastScrollY] = useState(0);
 
   const isMainPage = location.pathname === "/";
-  const isGmbPage = location.pathname === "/gmb";
-  const isCheckoutPage =
-    location.pathname === "/checkout" ||
-    location.pathname === "/checkout/success";
 
   const scrollToSection = useCallback(
     (sectionId) => {
