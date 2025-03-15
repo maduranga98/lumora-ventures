@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { ArrowRight } from "lucide-react";
-import heroImage from "../assets/hero-image.png";
+import heroImage from "../assets/img1.png";
 
 const Hero = ({ onNavClick }) => {
   useEffect(() => {
@@ -21,57 +21,86 @@ const Hero = ({ onNavClick }) => {
   }, []);
 
   return (
-    <div className="relative bg-white pt-16 pb-32 overflow-hidden min-h-screen flex items-center">
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-white z-0" />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-8 items-center">
-          <div className="text-center lg:text-left animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000 ease-out">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-              <span className="block mb-2 animate-fadeIn">Illuminating</span>
-              <span className="block text-indigo-600 animate-slideUp">
-                Pathways to Innovation
-              </span>
-            </h1>
-            <p className="mt-6 text-lg md:text-xl text-gray-600 animate-fadeIn delay-300">
-              Transforming Businesses with Cutting-Edge Solutions
-            </p>
-            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <button
-                onClick={() => onNavClick("packages")}
-                className="group inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transform hover:scale-105 transition-all duration-300"
-              >
-                Explore Our Packages
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </button>
-              <button
-                onClick={() => onNavClick("services")}
-                className="group inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-md text-indigo-600 bg-white border-2 border-indigo-600 hover:bg-indigo-50 transform hover:scale-105 transition-all duration-300"
-              >
-                Discover Our Services
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
-          </div>
+    <section className="relative min-h-screen bg-[#F8F9FC] overflow-hidden">
+      {/* Background elements */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#F8F9FC] to-[#F1F3F9]" />
+        <div
+          className="absolute inset-0 opacity-20"
+          style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, #09122C 1px, transparent 0)`,
+            backgroundSize: "40px 40px",
+          }}
+        />
+        <div className="absolute top-0 right-0 w-72 h-72 lg:w-96 lg:h-96 bg-[#09122C]/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-72 h-72 lg:w-96 lg:h-96 bg-[#ECAF41]/20 rounded-full blur-3xl" />
+      </div>
 
-          <div className="relative animate-on-scroll opacity-0 translate-x-8 transition-all duration-1000 ease-out">
-            <div className="relative mx-auto max-w-lg">
-              <div className="w-full h-64 bg-gray-900 md:h-72 lg:h-80 rounded-xl shadow-2xl ring-1 ring-white/10 overflow-hidden transform hover:scale-105 transition-transform duration-500">
-                <img
-                  src={heroImage}
-                  alt="Lumora Services Diagram"
-                  className="w-full h-full object-contain p-4"
-                  style={{
-                    maxWidth: "600px",
-                    maxHeight: "480px",
-                    margin: "0 auto",
-                  }}
-                />
+      {/* Main content wrapper */}
+      <div className="relative h-full">
+        <div className="container mx-auto h-full">
+          <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-between h-full gap-8 lg:gap-4 pt-28 md:pt-32 lg:pt-40 pb-12 md:pb-16 lg:pb-20">
+            {/* Text content */}
+            <div className="animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000 ease-out w-full lg:w-[45%] text-center lg:text-left">
+              <h1 className="font-bold tracking-tight">
+                <div className="inline-block text-[#09122C] text-4xl sm:text-5xl md:text-6xl lg:text-[3.5rem] xl:text-6xl 2xl:text-7xl">
+                  Strategic Innovation
+                </div>
+                <div className="mt-2 lg:mt-4 bg-gradient-to-r from-[#09122C] to-[#ECAF41] bg-clip-text text-transparent text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl 2xl:text-7xl">
+                  For Progressive Enterprises
+                </div>
+              </h1>
+
+              <p className="mt-6 text-lg sm:text-xl lg:text-2xl text-[#09122C]/90 max-w-2xl lg:max-w-3xl font-medium">
+                Elevating businesses through bespoke technology solutions and
+                forward-thinking digital strategies.
+              </p>
+
+              <div className="mt-8 lg:mt-12 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <button
+                  onClick={() => onNavClick("packages")}
+                  className="group inline-flex items-center justify-center whitespace-nowrap rounded-lg 
+                           bg-[#ECAF41] px-8 py-4 text-lg font-semibold text-[#09122C] 
+                           hover:bg-[#F5C15D] transition-all duration-300
+                           shadow-lg shadow-[#ECAF41]/30 hover:shadow-[#ECAF41]/40
+                           transform hover:scale-105 border-2 border-[#ECAF41]/90"
+                >
+                  Explore Solutions
+                  <ArrowRight className="ml-3 h-6 w-6 transition-transform group-hover:translate-x-2" />
+                </button>
+
+                <button
+                  onClick={() => onNavClick("services")}
+                  className="group inline-flex items-center justify-center whitespace-nowrap rounded-lg 
+                           border-2 border-[#09122C] bg-white/95 backdrop-blur-sm px-8 py-3.5 
+                           text-lg font-semibold text-[#09122C] hover:bg-[#09122C]/5
+                           transition-all duration-300 shadow-md hover:shadow-lg
+                           transform hover:scale-[1.02] hover:border-[#ECAF41] hover:text-[#ECAF41]"
+                >
+                  Our Expertise
+                  <ArrowRight className="ml-3 h-6 w-6 transition-transform group-hover:translate-x-2" />
+                </button>
+              </div>
+            </div>
+
+            {/* Image container */}
+            <div className="animate-on-scroll opacity-0 translate-x-8 transition-all duration-1000 ease-out w-full lg:w-[50%]">
+              <div className="relative max-w-xl lg:max-w-3xl mx-auto">
+                <div className="absolute -inset-4 bg-gradient-to-r from-[#09122C]/10 to-[#ECAF41]/20 rounded-3xl blur-2xl" />
+                <div className="relative rounded-2xl overflow-hidden backdrop-blur-sm bg-white/40 border-2 border-[#ECAF41]/20 shadow-xl">
+                  <img
+                    src={heroImage}
+                    alt="Business Innovation"
+                    className="w-full h-auto object-contain transition-all duration-500 hover:scale-[1.02]"
+                    loading="eager"
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

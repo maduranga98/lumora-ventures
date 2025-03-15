@@ -1,171 +1,178 @@
 import React, { useState } from "react";
 import { Building2, Share2, Scissors, ArrowRight, Check } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Services = ({ onNavClick }) => {
-  const [activeTab, setActiveTab] = useState("gmb");
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [hoveredService, setHoveredService] = useState(null);
+  const navigate = useNavigate();
 
-  const services = {
-    gmb: {
+  const services = [
+    {
+      id: "gmb",
       title: "Google My Business Management",
       icon: Building2,
-      description: `Boost your business visibility with our Google My Business (GMB) Management Services. Whether you're a small local business or a growing enterprise, we ensure your GMB profile is fully optimized to attract more customers and improve local search rankings.`,
-      details: `Our services include accurate business information setup, regular updates, engaging content creation, and prompt response to customer reviews. By leveraging analytics, we refine strategies to keep your business ahead in the local search game.`,
+      description:
+        "Boost your business visibility with our Google My Business (GMB) Management Services. Whether you're a small local business or a growing enterprise, we ensure your GMB profile is fully optimized to attract more customers and improve local search rankings.",
+      details:
+        "Our services include accurate business information setup, regular updates, engaging content creation, and prompt response to customer reviews. By leveraging analytics, we refine strategies to keep your business ahead in the local search game.",
       benefits: [
         "Increased customer engagement",
         "Enhanced credibility with consistent and updated information",
         "Improved search visibility with optimized listings",
       ],
-      cta: "Optimize My Business Now",
+      cta: "View more",
+      action: () => navigate("/gmb"),
     },
-    social: {
+    {
+      id: "salon",
+      title: "Salon Management Solutions",
+      icon: Scissors,
+      description:
+        "Revolutionize your salon operations with our All-in-One Salon Management System. Whether you run a small boutique salon or a large chain, our software is designed to handle every aspect of your business effortlessly.",
+      details:
+        "From appointment scheduling to inventory management, employee payroll, and customer feedback, our system provides everything you need to streamline operations and enhance customer satisfaction.",
+      benefits: [
+        "Save time by automating manual processes",
+        "Enhance customer experience with efficient booking",
+        "Monitor business performance with detailed analytics",
+      ],
+      cta: "Transform My Salon Today",
+      action: () => window.open("https://www.curlcipher.com/", "_blank"),
+    },
+    {
+      id: "social",
       title: "Social Media Marketing",
       icon: Share2,
-      description: `Connect, engage, and grow your brand with our comprehensive Social Media Marketing Services. From strategy development to content creation and analytics, we handle everything to ensure your brand resonates with your audience across platforms like Facebook, Instagram, LinkedIn, and more.`,
-      details: `We design creative campaigns that align with your brand's voice and target the right audience. Through paid ad campaigns, we help you maximize ROI while building long-lasting relationships with your customers.`,
-      features: [
-        "Engaging content creation (posts, stories, and videos)",
-        "Audience targeting and ad campaign management",
-        "Monthly growth and engagement reports",
-      ],
+      description:
+        "Connect, engage, and grow your brand with our comprehensive Social Media Marketing Services. From strategy development to content creation and analytics, we handle everything to ensure your brand resonates with your audience across platforms.",
+      details:
+        "We design creative campaigns that align with your brand's voice and target the right audience. Through paid ad campaigns, we help you maximize ROI while building long-lasting relationships with your customers.",
       benefits: [
         "Strengthened brand identity",
         "Improved customer reach and engagement",
         "Increased conversion rates with targeted strategies",
       ],
       cta: "Start Growing My Audience",
+      action: () => onNavClick("contact"),
+      comingSoon: true,
     },
-    salon: {
-      title: "Salon Management Solutions",
-      icon: Scissors,
-      description: `Revolutionize your salon operations with our All-in-One Salon Management System. Whether you run a small boutique salon or a large chain, our software is designed to handle every aspect of your business effortlessly.`,
-      details: `From appointment scheduling to inventory management, employee payroll, and customer feedback, our system provides everything you need to streamline operations and enhance customer satisfaction.`,
-      features: [
-        "Appointment scheduling with online booking options",
-        "Employee management, including payroll and performance tracking",
-        "Inventory tracking to monitor stock levels and orders",
-        "Feedback system to improve client satisfaction and loyalty",
-      ],
-      benefits: [
-        "Save time by automating manual processes",
-        "Enhance customer experience with efficient booking and tracking",
-        "Monitor business performance with detailed analytics and reports",
-      ],
-      cta: "Transform My Salon Today",
-    },
-  };
+  ];
 
-  const handleTabChange = (key) => {
-    setIsAnimating(true);
-    setActiveTab(key);
-    setTimeout(() => setIsAnimating(false), 300);
-  };
   return (
-    <div className="bg-gradient-to-b from-white to-gray-50 py-16 lg:py-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center animate-on-scroll opacity-0 translate-y-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-            Our Services
-          </h2>
-          <p className="mt-4 text-lg text-gray-600">
-            Tailored solutions for your business success
-          </p>
-        </div>
+    <section className="relative min-h-screen bg-[#F8FAFF] overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#F8FAFF] to-[#F0F4FF]" />
+        <div
+          className="absolute inset-0 opacity-15"
+          style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, #09122C 1px, transparent 0)`,
+            backgroundSize: "50px 50px",
+          }}
+        />
+        <div className="absolute top-0 right-0 w-72 h-72 lg:w-96 lg:h-96 bg-indigo-200/40 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-72 h-72 lg:w-96 lg:h-96 bg-indigo-300/30 rounded-full blur-3xl" />
+      </div>
 
-        {/* Service Navigation */}
-        <div className="mt-12 flex justify-center">
-          <nav className="flex flex-wrap justify-center gap-4 max-w-full px-4">
-            {Object.entries(services).map(([key, service]) => (
-              <button
-                key={key}
-                onClick={() => handleTabChange(key)}
-                className={`px-4 py-2 rounded-lg transition-all duration-300 flex items-center whitespace-normal min-w-[200px] sm:min-w-0
-          ${
-            activeTab === key
-              ? "bg-indigo-600 text-white transform scale-105"
-              : "text-gray-600 hover:bg-gray-100"
-          }`}
+      <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center justify-start min-h-screen py-16 sm:py-20 md:py-24 lg:py-32">
+          {/* Header */}
+          <div className="text-center mb-16 sm:mb-20">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#09122C] mb-6">
+              Our Services
+            </h2>
+            <p className="text-lg sm:text-xl text-[#09122C]/90 max-w-2xl mx-auto">
+              Elevate your business with our comprehensive solutions
+            </p>
+          </div>
+
+          {/* Services Grid - changed to flex row for desktop */}
+          <div className="flex flex-col lg:flex-row gap-8 w-full">
+            {services.map((service, index) => (
+              <div
+                key={service.id}
+                className="animate-on-scroll opacity-0 translate-y-8 w-full"
+                style={{ animationDelay: `${index * 200}ms` }}
+                onMouseEnter={() => setHoveredService(service.id)}
+                onMouseLeave={() => setHoveredService(null)}
               >
-                <service.icon className="h-5 w-5 mr-2 flex-shrink-0" />
-                <span className="text-sm sm:text-base">{service.title}</span>
-              </button>
-            ))}
-          </nav>
-        </div>
-
-        {/* Service Content */}
-        {/* Service Content */}
-        <div className="mt-16">
-          {Object.entries(services).map(([key, service]) => (
-            <div
-              key={key}
-              className={`transition-all duration-300 transform 
-        ${
-          activeTab === key
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 translate-y-4 hidden"
-        }
-        ${isAnimating ? "animate-pulse" : ""}
-      `}
-            >
-              <div className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300 p-8">
-                <div className="max-w-3xl mx-auto animate-on-scroll opacity-0 translate-y-8">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                    {service.title}
-                  </h3>
-                  <p className="text-gray-700 mb-6">{service.description}</p>
-                  <p className="text-gray-700 mb-8">{service.details}</p>
-
-                  {service.features && (
-                    <div className="mb-8 animate-on-scroll opacity-0 translate-y-8">
-                      <h4 className="text-lg font-semibold mb-4">
-                        What's Included:
-                      </h4>
-                      <ul className="space-y-3">
-                        {service.features.map((feature, index) => (
-                          <li key={index} className="flex items-start group">
-                            <Check className="h-5 w-5 text-indigo-600 mr-2 mt-1 group-hover:scale-110 transition-transform" />
-                            <span className="group-hover:text-gray-900 transition-colors">
-                              {feature}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
+                <div
+                  className={`h-full bg-white/95 backdrop-blur-sm rounded-xl shadow-lg 
+                             hover:shadow-xl transition-all duration-300 overflow-hidden relative
+                             border-2 ${
+                               hoveredService === service.id
+                                 ? "border-[#ECAF41]"
+                                 : "border-white"
+                             }`}
+                >
+                  {/* Coming Soon Label */}
+                  {service.comingSoon && (
+                    <div className="absolute top-4 right-4 bg-[#ECAF41] text-[#09122C] px-2 py-1 rounded text-sm font-semibold z-10">
+                      Coming Soon
                     </div>
                   )}
 
-                  <div className="mb-8 animate-on-scroll opacity-0 translate-y-8">
-                    <h4 className="text-lg font-semibold mb-4">
-                      {service.features ? "Benefits:" : "Why Choose Us:"}
-                    </h4>
-                    <ul className="space-y-3">
-                      {service.benefits.map((benefit, index) => (
-                        <li key={index} className="flex items-start group">
-                          <Check className="h-5 w-5 text-indigo-600 mr-2 mt-1 group-hover:scale-110 transition-transform" />
-                          <span className="group-hover:text-gray-900 transition-colors">
-                            {benefit}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
+                  {/* Service Header */}
+                  <div className="p-6 border-b border-[#09122C]/10">
+                    <div className="flex items-center gap-4 mb-4">
+                      <div
+                        className="flex items-center justify-center w-12 h-12 rounded-lg 
+                                  bg-gradient-to-r from-[#09122C] to-[#1A2A5F]"
+                      >
+                        <service.icon className="h-6 w-6 text-[#ECAF41]" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-[#09122C]">
+                        {service.title}
+                      </h3>
+                    </div>
+                    <p className="text-[#09122C]/90 mb-4">
+                      {service.description}
+                    </p>
                   </div>
 
-                  <div className="text-center animate-on-scroll opacity-0 translate-y-8">
+                  {/* Service Details */}
+                  <div className="p-6 bg-[#F0F4FF]/50">
+                    <p className="text-[#09122C]/90 mb-6">{service.details}</p>
+
+                    {/* Benefits */}
+                    <div className="space-y-3 mb-6">
+                      {service.benefits.map((benefit, index) => (
+                        <div key={index} className="flex items-start gap-3">
+                          <Check className="h-5 w-5 text-[#ECAF41] mt-1 flex-shrink-0" />
+                          <span className="text-[#09122C]/90">{benefit}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* CTA Button */}
                     <button
-                      onClick={() => onNavClick("contact")}
-                      className="group inline-flex items-center justify-center px-6 py-3 rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transform hover:scale-105 transition-all duration-300"
+                      onClick={service.action}
+                      className={`w-full group flex items-center justify-center px-6 py-3 
+                               bg-gradient-to-r from-[#ECAF41] to-[#F5C15D] 
+                               text-[#09122C] rounded-lg font-semibold
+                               hover:shadow-lg hover:shadow-[#ECAF41]/20 
+                               transition-all duration-300 border-2 border-[#ECAF41]
+                               ${
+                                 service.comingSoon
+                                   ? "opacity-60 cursor-not-allowed"
+                                   : ""
+                               }`}
+                      disabled={service.comingSoon}
                     >
                       {service.cta}
-                      <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                      <ArrowRight
+                        className="ml-2 h-5 w-5 transition-transform 
+                                   group-hover:translate-x-1"
+                      />
                     </button>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
