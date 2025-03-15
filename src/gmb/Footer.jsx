@@ -44,8 +44,12 @@ const Footer = () => {
             </div>
 
             <div className="flex space-x-4 mt-6">
+              {/* Fixed social media links with proper URLs */}
               <a
-                href="#"
+                href="https://facebook.com/lumoraventures"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Visit our Facebook page"
                 className="h-10 w-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-indigo-600 transition-colors"
               >
                 <svg
@@ -63,7 +67,10 @@ const Footer = () => {
                 </svg>
               </a>
               <a
-                href="#"
+                href="https://twitter.com/lumoraventures"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Visit our Twitter page"
                 className="h-10 w-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-indigo-600 transition-colors"
               >
                 <svg
@@ -81,7 +88,10 @@ const Footer = () => {
                 </svg>
               </a>
               <a
-                href="#"
+                href="https://linkedin.com/company/lumoraventures"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Visit our LinkedIn page"
                 className="h-10 w-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-indigo-600 transition-colors"
               >
                 <svg

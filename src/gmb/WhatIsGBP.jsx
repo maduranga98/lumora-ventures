@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import gbpScreenshot from "../assets/gbp-screenshot.jpg";
-import mobileGbpImage from "../assets/mobile-gbp-view.jpg";
-import customerSearchImage from "../assets/customer-search.jpg";
 import { useTheme } from "./Theme";
 
 const WhatIsGBP = () => {
@@ -85,7 +83,7 @@ const WhatIsGBP = () => {
             </p>
 
             <div
-              className="p-6 rounded-lg border-l-4 shadow-sm hover:shadow-md transition-shadow duration-300 transform hover:-translate-y-1 transition-transform duration-300"
+              className="p-6 rounded-lg border-l-4 shadow-sm hover:shadow-md transform hover:-translate-y-1 transition duration-300"
               style={{
                 backgroundColor: `${theme.colors.primary}10`,
                 borderColor: theme.colors.primary,
