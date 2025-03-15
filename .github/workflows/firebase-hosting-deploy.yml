@@ -14,13 +14,30 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "16"
-          cache: "npm"
+
+      - name: Debug environment
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Directory contents:"
+          ls -la
+          echo "Package.json content:"
+          cat package.json
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install
+          echo "Node modules after install:"
+          ls -la node_modules/.bin | grep react-scripts
 
       - name: Build
-        run: npm run build
+        run: |
+          export PATH="$PATH:$(pwd)/node_modules/.bin"
+          echo "PATH: $PATH"
+          which react-scripts || echo "react-scripts not found in PATH"
+          npm run build
+        env:
+          CI: false
 
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
