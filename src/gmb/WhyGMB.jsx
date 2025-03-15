@@ -16,34 +16,7 @@ const WhyGBPCrucial = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
 
-  // Observer for scroll animations
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.15 }
-    );
-
-    const section = document.getElementById("whyGBPCrucial");
-    if (section) observer.observe(section);
-
-    return () => {
-      if (section) observer.unobserve(section);
-    };
-  }, []);
-
-  // Auto-rotate through tabs
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveTab((prev) => (prev + 1) % benefits.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
+  // Define benefits array before using it in the useEffect hook
   // Benefits of Google Business Profile
   const benefits = [
     {
@@ -114,6 +87,34 @@ const WhyGBPCrucial = () => {
       statInfo: "ROI compared to traditional local advertising methods",
     },
   ];
+
+  // Observer for scroll animations
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    const section = document.getElementById("whyGBPCrucial");
+    if (section) observer.observe(section);
+
+    return () => {
+      if (section) observer.unobserve(section);
+    };
+  }, []);
+
+  // Auto-rotate through tabs
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveTab((prev) => (prev + 1) % benefits.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [isVisible, benefits.length]);
 
   return (
     <section
