@@ -279,7 +279,7 @@ const WhyGBPCrucial = () => {
           </div>
         </div>
 
-        {/* Success Stories Teaser */}
+        {/* Key statistics summary section to replace the testimonial */}
         <div
           className={`mt-16 bg-gray-50 rounded-xl overflow-hidden shadow-md transition-all duration-700 delay-300 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
@@ -296,61 +296,56 @@ const WhyGBPCrucial = () => {
             ></div>
 
             <div className="relative z-10">
-              <div className="flex flex-col md:flex-row items-center">
-                <div className="md:w-2/3 mb-6 md:mb-0 md:pr-8">
-                  <h3
-                    className="text-2xl font-bold mb-3"
-                    style={{ color: theme.colors.text.primary }}
+              <h3
+                className="text-2xl font-bold mb-6 text-center"
+                style={{ color: theme.colors.text.primary }}
+              >
+                GBP's Impact on Business Growth
+              </h3>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="bg-white p-4 rounded-lg shadow-sm text-center">
+                  <div
+                    className="text-3xl font-bold mb-2"
+                    style={{ color: theme.colors.secondary }}
                   >
-                    Real Results from Real Businesses
-                  </h3>
-                  <p className="text-gray-600 mb-4">
-                    Our clients are seeing dramatic improvements in local
-                    visibility, customer inquiries, and revenue after optimizing
-                    their Google Business Profiles.
-                  </p>
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div className="bg-white p-3 rounded shadow-sm">
-                      <div className="text-2xl font-bold text-green-500">
-                        ↑43%
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        Average increase in website traffic
-                      </div>
-                    </div>
-                    <div className="bg-white p-3 rounded shadow-sm">
-                      <div className="text-2xl font-bold text-green-500">
-                        ↑67%
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        More phone calls from GBP listings
-                      </div>
-                    </div>
+                    3.5x
                   </div>
-                  <button
-                    className="px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:shadow-lg mt-2"
-                    style={{
-                      backgroundColor: theme.colors.secondary,
-                      color: "#fff",
-                    }}
-                  >
-                    See Our Client Success Stories
-                  </button>
+                  <div className="text-sm text-gray-600">
+                    More website visits with optimized GBP
+                  </div>
                 </div>
-                <div className="md:w-1/3">
-                  <div className="bg-white p-4 rounded-lg shadow-md transform rotate-1 hover:rotate-0 transition-all duration-300">
-                    <div className="flex items-start mb-3">
-                      <div className="text-yellow-400 text-2xl mr-2">★★★★★</div>
-                      <div className="text-sm text-gray-400">1 month ago</div>
-                    </div>
-                    <p className="text-gray-700 italic mb-3">
-                      "Since Lumora Ventures optimized our GBP, we've seen a 58%
-                      increase in customer calls and appointments. Best
-                      investment we've made this year!"
-                    </p>
-                    <div className="font-semibold text-gray-800">
-                      — Sarah T., Lakeside Dental
-                    </div>
+                <div className="bg-white p-4 rounded-lg shadow-sm text-center">
+                  <div
+                    className="text-3xl font-bold mb-2"
+                    style={{ color: theme.colors.secondary }}
+                  >
+                    70%
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    More store visits with complete GBP
+                  </div>
+                </div>
+                <div className="bg-white p-4 rounded-lg shadow-sm text-center">
+                  <div
+                    className="text-3xl font-bold mb-2"
+                    style={{ color: theme.colors.secondary }}
+                  >
+                    50%
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    Higher purchase likelihood for businesses with GBP
+                  </div>
+                </div>
+                <div className="bg-white p-4 rounded-lg shadow-sm text-center">
+                  <div
+                    className="text-3xl font-bold mb-2"
+                    style={{ color: theme.colors.secondary }}
+                  >
+                    7X
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    More engagement than traditional local advertising
                   </div>
                 </div>
               </div>

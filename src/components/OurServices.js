@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { Building2, Share2, Scissors, ArrowRight, Check } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
 const Services = ({ onNavClick }) => {
   const [hoveredService, setHoveredService] = useState(null);
-  const navigate = useNavigate();
+
+  // Direct navigation to GMB page without any custom state
+  const navigateToGMB = () => {
+    // Force a full page load to reset all states and scroll positions
+    window.location.href = "/gmb";
+  };
 
   const services = [
     {
@@ -21,7 +25,7 @@ const Services = ({ onNavClick }) => {
         "Improved search visibility with optimized listings",
       ],
       cta: "View more",
-      action: () => navigate("/gmb"),
+      action: navigateToGMB, // Use direct navigation function
     },
     {
       id: "salon",
@@ -105,9 +109,9 @@ const Services = ({ onNavClick }) => {
                                  : "border-white"
                              }`}
                 >
-                  {/* Coming Soon Label */}
+                  {/* Coming Soon Label - Fixed positioning for all screen sizes */}
                   {service.comingSoon && (
-                    <div className="absolute top-4 right-4 bg-[#ECAF41] text-[#09122C] px-2 py-1 rounded text-sm font-semibold z-10">
+                    <div className="absolute top-4 right-4 z-10 inline-flex items-center justify-center px-2 py-1 rounded text-sm font-semibold bg-[#ECAF41] text-[#09122C] whitespace-nowrap">
                       Coming Soon
                     </div>
                   )}
@@ -121,7 +125,7 @@ const Services = ({ onNavClick }) => {
                       >
                         <service.icon className="h-6 w-6 text-[#ECAF41]" />
                       </div>
-                      <h3 className="text-xl font-semibold text-[#09122C]">
+                      <h3 className="text-xl font-semibold text-[#09122C] pr-12">
                         {service.title}
                       </h3>
                     </div>

@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useTheme } from "./Theme";
 import { ChevronDown, ChevronUp, HelpCircle } from "lucide-react";
+import ContactForm from "../widgets/ContactForm";
 
 const FAQSection = () => {
   const theme = useTheme();
   const [isVisible, setIsVisible] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState(null);
+  const [showContactForm, setShowContactForm] = useState(false);
+  const [showEmailForm, setShowEmailForm] = useState(false);
 
   // Observer for scroll animations
   useEffect(() => {
@@ -88,6 +91,151 @@ const FAQSection = () => {
         "Yes, you'll still have full access to your Google Business Profile. However, we recommend discussing changes with us first to ensure they align with our optimization strategy. If you make changes, simply let us know so we can update our records and ensure everything remains consistent.",
     },
   ];
+
+  // Simple Email Contact Form Component
+  const SimpleContactForm = ({ onClose }) => {
+    const [formData, setFormData] = useState({
+      name: "",
+      email: "",
+      subject: "Question about GBP Services",
+      message: "",
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [formSubmitted, setFormSubmitted] = useState(false);
+
+    const handleInputChange = (e) => {
+      const { name, value } = e.target;
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    };
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      setIsSubmitting(true);
+
+      // Simulate form submission
+      try {
+        // Here you would normally submit to your backend or email service
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        setFormSubmitted(true);
+
+        setTimeout(() => {
+          onClose();
+        }, 2000);
+      } catch (error) {
+        console.error("Error submitting form:", error);
+      } finally {
+        setIsSubmitting(false);
+      }
+    };
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center px-4">
+        <div
+          className="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {formSubmitted ? (
+            <div className="p-6 text-center">
+              <div className="text-green-500 text-4xl mb-4">✓</div>
+              <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                Message Sent!
+              </h3>
+              <p className="text-gray-600">
+                Thank you for contacting us. We'll get back to you shortly.
+              </p>
+            </div>
+          ) : (
+            <>
+              <div className="bg-gradient-to-r from-[#09122C] to-[#1A2A5F] p-6 text-white">
+                <h3 className="font-bold text-xl">Contact Our GBP Team</h3>
+                <p className="text-white/80 text-sm mt-1">
+                  We'll get back to you as soon as possible
+                </p>
+              </div>
+
+              <form onSubmit={handleSubmit} className="p-6 space-y-4">
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Your Name*
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-[#ECAF41] focus:border-transparent"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Email Address*
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-[#ECAF41] focus:border-transparent"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Subject*
+                  </label>
+                  <input
+                    type="text"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-[#ECAF41] focus:border-transparent"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Message*
+                  </label>
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    required
+                    rows="4"
+                    className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-[#ECAF41] focus:border-transparent"
+                  ></textarea>
+                </div>
+
+                <div className="flex items-center justify-between pt-4">
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="text-gray-600 hover:text-gray-800"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="px-4 py-2 bg-gradient-to-r from-[#ECAF41] to-[#F5C15D] text-[#09122C] font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+                  >
+                    {isSubmitting ? "Sending..." : "Send Message"}
+                  </button>
+                </div>
+              </form>
+            </>
+          )}
+        </div>
+      </div>
+    );
+  };
 
   return (
     <section
@@ -201,6 +349,7 @@ const FAQSection = () => {
                 backgroundColor: theme.colors.secondary,
                 color: "#fff",
               }}
+              onClick={() => setShowEmailForm(true)}
             >
               Contact Us
             </button>
@@ -211,12 +360,25 @@ const FAQSection = () => {
                 borderColor: theme.colors.primary,
                 color: theme.colors.primary,
               }}
+              onClick={() => setShowContactForm(true)}
             >
               Schedule a Free Consultation
             </button>
           </div>
         </div>
       </div>
+
+      {/* Contact Form for Free Consultation */}
+      <ContactForm
+        isOpen={showContactForm}
+        onClose={() => setShowContactForm(false)}
+        theme={theme}
+      />
+
+      {/* Simple Email Form for Contact Us */}
+      {showEmailForm && (
+        <SimpleContactForm onClose={() => setShowEmailForm(false)} />
+      )}
     </section>
   );
 };

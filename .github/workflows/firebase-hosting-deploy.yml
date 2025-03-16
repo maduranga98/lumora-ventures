@@ -1,45 +1,41 @@
-name: Deploy to Firebase Hosting
+name: Build and Deploy to Firebase
+
 on:
   push:
     branches:
       - main
+
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "16"
+          cache: "npm"
 
-      - name: Debug environment
+      - name: Install Dependencies
         run: |
-          echo "Current directory:"
-          pwd
-          echo "Directory contents:"
-          ls -la
-          echo "Package.json content:"
-          cat package.json
+          npm ci
+          # Explicitly install react-scripts if it's not being found
+          npm install react-scripts --save-dev
 
-      - name: Install dependencies
+      - name: Build React App
         run: |
-          npm install
-          echo "Node modules after install:"
-          ls -la node_modules/.bin | grep react-scripts
-
-      - name: Build
-        run: |
-          export PATH="$PATH:$(pwd)/node_modules/.bin"
-          echo "PATH: $PATH"
-          which react-scripts || echo "react-scripts not found in PATH"
-          npm run build
+          # Use npx to ensure react-scripts is found
+          npx react-scripts --openssl-legacy-provider build
         env:
           CI: false
 
-      - name: Deploy to Firebase
+      - name: Install Functions Dependencies
+        working-directory: ./functions
+        run: npm ci
+
+      - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
