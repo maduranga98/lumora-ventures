@@ -10,7 +10,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 
-const WhyChooseLumora = () => {
+const WhyChooseLumora = ({ onNavClick }) => {
   const theme = useTheme();
   const [isVisible, setIsVisible] = useState(false);
 
@@ -33,6 +33,27 @@ const WhyChooseLumora = () => {
       if (section) observer.unobserve(section);
     };
   }, []);
+
+  // Handle navigation to packages/services section
+  const navigateToServices = () => {
+    if (onNavClick) {
+      onNavClick("packages");
+    } else {
+      // Fallback if onNavClick isn't provided
+      const packagesSection = document.getElementById("packages");
+      if (packagesSection) {
+        const navbarHeight = 64;
+        const elementPosition = packagesSection.getBoundingClientRect().top;
+        const offsetPosition =
+          elementPosition + window.pageYOffset - navbarHeight;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
+    }
+  };
 
   // Key selling points
   const sellingPoints = [
@@ -300,6 +321,7 @@ const WhyChooseLumora = () => {
                   </p>
                 </div>
                 <button
+                  onClick={navigateToServices}
                   className="px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:shadow-lg min-w-[200px]"
                   style={{
                     backgroundColor: theme.colors.secondary,

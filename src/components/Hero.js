@@ -58,7 +58,7 @@ const Hero = ({ onNavClick }) => {
 
               <div className="mt-8 lg:mt-12 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <button
-                  onClick={() => onNavClick("packages")}
+                  onClick={() => onNavClick("services")}
                   className="group inline-flex items-center justify-center whitespace-nowrap rounded-lg 
                            bg-[#ECAF41] px-8 py-4 text-lg font-semibold text-[#09122C] 
                            hover:bg-[#F5C15D] transition-all duration-300
@@ -70,14 +70,14 @@ const Hero = ({ onNavClick }) => {
                 </button>
 
                 <button
-                  onClick={() => onNavClick("services")}
+                  onClick={() => onNavClick("contact")}
                   className="group inline-flex items-center justify-center whitespace-nowrap rounded-lg 
                            border-2 border-[#09122C] bg-white/95 backdrop-blur-sm px-8 py-3.5 
                            text-lg font-semibold text-[#09122C] hover:bg-[#09122C]/5
                            transition-all duration-300 shadow-md hover:shadow-lg
                            transform hover:scale-[1.02] hover:border-[#ECAF41] hover:text-[#ECAF41]"
                 >
-                  Our Expertise
+                  Contact Us
                   <ArrowRight className="ml-3 h-6 w-6 transition-transform group-hover:translate-x-2" />
                 </button>
               </div>

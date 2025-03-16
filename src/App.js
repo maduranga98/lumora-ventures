@@ -14,7 +14,7 @@ import Hero from "./components/Hero";
 import Navbar from "./components/NavBar";
 import Services from "./components/OurServices";
 import Overview from "./components/Overview";
-import Packages from "./components/Packages";
+// import Packages from "./components/Packages";
 import Footer from "./components/Footer";
 import ContactUs from "./components/Contact";
 import PrivacyPolicy from "./components/PrivacyPolicy";
@@ -58,9 +58,9 @@ const MainContent = () => {
       <section id="about" className="min-h-screen bg-[#8698C4]">
         <AboutUs onNavClick={scrollToSection} />
       </section>
-      <section id="packages" className="min-h-screen bg-[#7291E6]">
+      {/* <section id="packages" className="min-h-screen bg-[#7291E6]">
         <Packages onNavClick={scrollToSection} />
-      </section>
+      </section> */}
       <section id="services" className="min-h-screen bg-[#8698C4]">
         <Services onNavClick={scrollToSection} />
       </section>

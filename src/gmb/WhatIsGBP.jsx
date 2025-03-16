@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import gbpScreenshot from "../assets/gbp-screenshot.jpg";
 import { useTheme } from "./Theme";
+import ContactForm from "../widgets/ContactForm";
 
 const WhatIsGBP = () => {
   const theme = useTheme();
   const [isVisible, setIsVisible] = useState(false);
+  const [showContactForm, setShowContactForm] = useState(false); // State to control modal visibility
 
   // Observer for scroll animations
   useEffect(() => {
@@ -217,6 +219,7 @@ const WhatIsGBP = () => {
             location visits.
           </p>
           <button
+            onClick={() => setShowContactForm(true)} // Open modal on click
             className="px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1"
             style={{
               backgroundColor: theme.colors.secondary,
@@ -227,6 +230,13 @@ const WhatIsGBP = () => {
           </button>
         </div>
       </div>
+
+      {/* Contact Form Modal */}
+      <ContactForm
+        isOpen={showContactForm}
+        onClose={() => setShowContactForm(false)}
+        theme={theme}
+      />
     </section>
   );
 };

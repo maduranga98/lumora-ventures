@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeft, Menu, X, ChevronUp } from "lucide-react";
 import Header from "./Header";
 import WhatIsGBP from "./WhatIsGBP";
@@ -12,10 +12,12 @@ import FAQSection from "./FAQSection";
 
 const GmbPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   // Navigation items - wrapped in useMemo to prevent recreation on every render
   const navItems = useMemo(
@@ -30,6 +32,28 @@ const GmbPage = () => {
     ],
     []
   );
+
+  // Check if we need to scroll to top on component mount
+  useEffect(() => {
+    // Set initial load - this will prevent automatic scrolling on first render
+    let timer = setTimeout(() => {
+      setIsInitialLoad(false);
+    }, 100);
+
+    // Check if we have state with scrollToTop flag
+    if (location.state?.scrollToTop && !isInitialLoad) {
+      // Use a gentle scroll to the top
+      window.scrollTo({
+        top: 0,
+        behavior: "auto", // Use "auto" instead of "smooth" to prevent animation issues
+      });
+
+      // Clear the location state to prevent scrolling on subsequent renders
+      window.history.replaceState({}, document.title);
+    }
+
+    return () => clearTimeout(timer);
+  }, [location, isInitialLoad]);
 
   // Handle scroll events
   useEffect(() => {
@@ -59,7 +83,7 @@ const GmbPage = () => {
     };
   }, [navItems]);
 
-  // Scroll to section functionality
+  // Scroll to section functionality with gentler scrolling
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
@@ -68,23 +92,64 @@ const GmbPage = () => {
       const offsetPosition =
         elementPosition + window.pageYOffset - navbarHeight;
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
+      // Slower, more controlled scrolling
+      const duration = 1000; // ms
+      const startPosition = window.pageYOffset;
+      const distance = offsetPosition - startPosition;
+      let startTime = null;
 
+      function animation(currentTime) {
+        if (startTime === null) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const scrollProgress = Math.min(timeElapsed / duration, 1);
+
+        // Use easeInOutQuad for smoother scrolling
+        const easing =
+          scrollProgress < 0.5
+            ? 2 * scrollProgress * scrollProgress
+            : 1 - Math.pow(-2 * scrollProgress + 2, 2) / 2;
+
+        window.scrollTo(0, startPosition + distance * easing);
+
+        if (timeElapsed < duration) {
+          requestAnimationFrame(animation);
+        }
+      }
+
+      requestAnimationFrame(animation);
       setActiveSection(id);
     }
     setIsMenuOpen(false);
   };
 
-  // Scroll to top function
+  // Scroll to top function with gentler scrolling
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    const startPosition = window.pageYOffset;
+    const duration = 1000; // ms
+    let startTime = null;
+
+    function animation(currentTime) {
+      if (startTime === null) startTime = currentTime;
+      const timeElapsed = currentTime - startTime;
+      const scrollProgress = Math.min(timeElapsed / duration, 1);
+
+      // Use easeOutQuad for smoother scrolling
+      const easing = 1 - Math.pow(1 - scrollProgress, 2);
+
+      window.scrollTo(0, startPosition * (1 - easing));
+
+      if (timeElapsed < duration) {
+        requestAnimationFrame(animation);
+      }
+    }
+
+    requestAnimationFrame(animation);
     setActiveSection("home");
+  };
+
+  // Handler for Get Started button - navigate to packages section
+  const handleGetStarted = () => {
+    scrollToSection("packages");
   };
 
   return (
@@ -139,7 +204,7 @@ const GmbPage = () => {
                 </button>
               ))}
               <button
-                onClick={() => scrollToSection("contact")}
+                onClick={handleGetStarted}
                 className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 lg:px-5 xl:px-6 py-2 lg:py-2.5 xl:py-3 rounded-lg text-sm lg:text-base font-medium transition-colors"
               >
                 Get Started
@@ -174,7 +239,7 @@ const GmbPage = () => {
                 </button>
               ))}
               <button
-                onClick={() => scrollToSection("contact")}
+                onClick={handleGetStarted}
                 className="bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-4 rounded-lg text-sm font-medium transition-colors mt-2"
               >
                 Get Started
@@ -217,9 +282,9 @@ const GmbPage = () => {
           <WhyGBPCrucial />
         </div>
 
-        {/* Why Choose Us Section */}
+        {/* Why Choose Us Section - Pass the navigation function */}
         <div id="whyChoose">
-          <WhyChooseLumora />
+          <WhyChooseLumora onNavClick={scrollToSection} />
         </div>
 
         {/* Services/Packages Section */}
@@ -235,7 +300,7 @@ const GmbPage = () => {
 
       {/* Contact Section */}
       <div id="contact">
-        <Footer />
+        <Footer onNavClick={scrollToSection} />
       </div>
 
       {/* Scroll to top button - slightly larger on bigger screens */}

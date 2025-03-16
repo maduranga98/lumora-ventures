@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "./Theme";
 import { CheckCircle, Star, Zap, Calendar, BarChart2 } from "lucide-react";
+import ContactForm from "../widgets/ContactForm";
 
 const Packages = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
+  const [showContactForm, setShowContactForm] = useState(false); // State for contact form modal
 
   // Observer for scroll animations
   useEffect(() => {
@@ -71,6 +73,11 @@ const Packages = () => {
         },
       },
     });
+  };
+
+  // Handle consultation button click
+  const handleConsultationClick = () => {
+    setShowContactForm(true);
   };
 
   return (
@@ -457,13 +464,20 @@ const Packages = () => {
                 borderColor: theme.colors.primary,
                 color: theme.colors.primary,
               }}
-              onClick={() => navigate("/contact")}
+              onClick={handleConsultationClick}
             >
               Schedule a Free Consultation
             </button>
           </div>
         </div>
       </div>
+
+      {/* Contact Form Modal */}
+      <ContactForm
+        isOpen={showContactForm}
+        onClose={() => setShowContactForm(false)}
+        theme={theme}
+      />
     </section>
   );
 };

@@ -8,7 +8,8 @@ import {
 } from "lucide-react";
 import Img2 from "../assets/img2.png";
 
-const AboutUs = () => {
+const AboutUs = ({ onNavClick }) => {
+  // Add onNavClick prop
   useEffect(() => {
     const animateOnScroll = () => {
       const elements = document.querySelectorAll(".animate-on-scroll");
@@ -42,6 +43,27 @@ const AboutUs = () => {
       description: "Scaling strategies for sustainable development",
     },
   ];
+
+  // Handle Get Started button click
+  const handleGetStarted = () => {
+    if (onNavClick) {
+      onNavClick("services");
+    } else {
+      // Fallback if onNavClick isn't provided
+      const servicesSection = document.getElementById("services");
+      if (servicesSection) {
+        const navbarHeight = 80; // Account for fixed navbar height
+        const elementPosition = servicesSection.getBoundingClientRect().top;
+        const offsetPosition =
+          elementPosition + window.pageYOffset - navbarHeight;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
+    }
+  };
 
   return (
     <section className="relative min-h-screen bg-[#F8FAFF] overflow-hidden animate-fade-in">
@@ -107,6 +129,7 @@ const AboutUs = () => {
                   innovative solutions.
                 </p>
                 <button
+                  onClick={handleGetStarted}
                   className="button-animated group flex items-center px-6 py-3 bg-[#ECAF41] text-[#09122C] rounded-lg font-semibold 
                                  hover:bg-[#F5C15D] transition-all duration-200 shadow-md hover:shadow-lg border-2 border-[#ECAF41]"
                 >
