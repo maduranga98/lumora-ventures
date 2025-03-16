@@ -2,7 +2,7 @@ name: Build and Deploy to Firebase
 on:
   push:
     branches:
-      - main
+      - origin/main
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
