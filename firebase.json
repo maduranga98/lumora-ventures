@@ -7,7 +7,6 @@
     "source": "functions"
   },
   "hosting": {
-    "site": "lumora-web-temp",
     "public": "build",
     "ignore": [
       "firebase.json",
