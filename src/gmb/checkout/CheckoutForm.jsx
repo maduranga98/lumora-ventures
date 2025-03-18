@@ -119,9 +119,15 @@ const CheckoutForm = ({
         fontSize: "16px",
         color: "#424770",
         "::placeholder": { color: "#aab7c4" },
+        iconColor: theme.colors.primary,
+        // Make the layout more responsive
+        "@media (max-width: 640px)": {
+          fontSize: "14px",
+        },
       },
       invalid: { color: "#9e2146" },
     },
+    hidePostalCode: true,
   };
 
   return (
@@ -311,8 +317,23 @@ const CheckoutForm = ({
                 >
                   Card Information
                 </label>
-                <div className="p-3 bg-white rounded border border-gray-300">
-                  <CardElement options={cardElementOptions} />
+                <div className="p-3 bg-white rounded border border-gray-300 min-h-[60px]">
+                  <CardElement
+                    options={{
+                      ...cardElementOptions,
+                      style: {
+                        ...cardElementOptions.style,
+                        base: {
+                          ...cardElementOptions.style.base,
+                          fontSize: "16px",
+                          "@media (max-width: 640px)": {
+                            fontSize: "14px",
+                          },
+                        },
+                      },
+                      hidePostalCode: true,
+                    }}
+                  />
                 </div>
               </div>
             </div>
