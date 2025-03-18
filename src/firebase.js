@@ -1,8 +1,9 @@
+// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getFunctions, httpsCallable } from "firebase/functions";
-
+import { getFunctions } from "firebase/functions";
 // Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
@@ -16,17 +17,5 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Firestore
 export const db = getFirestore(app);
-
-// Initialize Functions with region
-let functionsInstance = null;
-try {
-  functionsInstance = getFunctions(app, "us-central1");
-  console.log("Firebase Functions initialized successfully");
-} catch (error) {
-  console.error("Error initializing Firebase Functions:", error);
-  // Provide a fallback for development
-}
-
-export const functions = functionsInstance;
+export const functions = getFunctions(app, "us-central1");
