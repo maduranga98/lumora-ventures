@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
@@ -23,7 +23,9 @@ const CheckoutPage = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   // Extract package data from location state, or use defaults
   const packageData = location.state?.packageData || {
     name: "Professional GBP Management",
