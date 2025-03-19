@@ -10,7 +10,7 @@ import {
   Instagram,
   Linkedin,
 } from "lucide-react";
-import logo from "../assets/logo_new.png";
+import logo from "../assets/logo_new.webp";
 
 const Footer = ({ onNavClick }) => {
   const navLinks = {
@@ -156,11 +156,7 @@ const Footer = ({ onNavClick }) => {
                 >
                   Office 4157, 58 Peregrine Road
                   <br />
-                  Hainault
-                  <br />
-                  Ilford
-                  <br />
-                  Essex
+                  Hainault, Ilford, Essex
                   <br />
                   United Kingdom
                   <br />

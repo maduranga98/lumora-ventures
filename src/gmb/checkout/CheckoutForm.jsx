@@ -1,21 +1,16 @@
 import React, { useState } from "react";
-import { useTheme } from "../Theme";
-import { CheckCircle, AlertCircle, Loader } from "lucide-react";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { httpsCallable } from "firebase/functions";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import { db, functions } from "../../firebase";
+import { httpsCallable } from "firebase/functions";
+import { functions } from "../../firebase";
+import { useTheme } from "../Theme";
 
-const CheckoutForm = ({
-  packageName = "Professional GBP Management",
-  packagePrice = 150,
-  onSuccess,
-  onCancel,
-}) => {
-  const theme = useTheme();
+const CheckoutForm = ({ packageName, packagePrice, onSuccess, onCancel }) => {
   const stripe = useStripe();
   const elements = useElements();
+  const theme = useTheme();
 
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -24,366 +19,281 @@ const CheckoutForm = ({
     businessAddress: "",
     website: "",
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!stripe || !elements) return;
+    if (!stripe || !elements) {
+      // Stripe.js has not loaded yet
+      return;
+    }
 
-    setLoading(true);
+    // Validate required fields
+    const requiredFields = ["name", "email", "businessName", "businessAddress"];
+    const missingFields = requiredFields.filter((field) => !formData[field]);
+
+    if (missingFields.length > 0) {
+      setError(
+        `Please fill in all required fields: ${missingFields.join(", ")}`
+      );
+      return;
+    }
+
+    // Use the exact price ID you provided
+    const priceId = "price_1R2nOQKKYKi1ENnWCnMjdSpR";
+
+    setIsProcessing(true);
     setError(null);
 
     try {
-      const cardElement = elements.getElement(CardElement);
+      // console.log(
+      //   `Creating payment for package: ${packageName} with priceId: ${priceId}`
+      // );
+
+      // 1. Create payment method
       const { error: paymentMethodError, paymentMethod } =
         await stripe.createPaymentMethod({
           type: "card",
-          card: cardElement,
+          card: elements.getElement(CardElement),
           billing_details: {
             name: formData.name,
             email: formData.email,
             phone: formData.phone,
-            address: { line1: formData.businessAddress },
+            address: {
+              line1: formData.businessAddress,
+            },
           },
         });
 
-      if (paymentMethodError) throw new Error(paymentMethodError.message);
+      if (paymentMethodError) {
+        throw new Error(paymentMethodError.message);
+      }
 
-      // For subscription
+      // 2. Call Firebase function to create subscription
       const createSubscription = httpsCallable(functions, "createSubscription");
-      const { data } = await createSubscription({
+
+      const result = await createSubscription({
         paymentMethodId: paymentMethod.id,
-        customerData: formData,
-        priceId: "price_1R2nRyKKYKi1ENnWiPY4IuMV", // Replace with your Price ID
+        customerData: {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          businessName: formData.businessName,
+          businessAddress: formData.businessAddress,
+          website: formData.website || "",
+        },
+        priceId: priceId,
+        packageName: packageName,
+        packagePrice: packagePrice,
       });
 
-      if (!data.clientSecret) {
-        throw new Error("Missing clientSecret in server response");
-      }
+      // 3. Handle the subscription result
+      const { clientSecret, subscriptionId, status } = result.data;
 
-      const { error: confirmError } = await stripe.confirmCardPayment(
-        data.clientSecret,
-        {
-          payment_method: paymentMethod.id,
+      if (status === "incomplete") {
+        // Confirm the payment
+        const { error: confirmError } = await stripe.confirmCardPayment(
+          clientSecret
+        );
+
+        if (confirmError) {
+          throw new Error(confirmError.message);
         }
-      );
-
-      if (confirmError) throw new Error(confirmError.message);
-
-      // Store customer data in Firestore
-      await addDoc(collection(db, "customers"), {
-        ...formData,
-        paymentMethodId: paymentMethod.id,
-        subscriptionId: data.subscriptionId,
-        createdAt: serverTimestamp(),
-        package: packageName,
-        price: packagePrice,
-      });
-
-      setSuccess(true);
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        businessName: "",
-        businessAddress: "",
-        website: "",
-      });
-      cardElement.clear();
-
-      // Call success callback if provided
-      if (onSuccess && typeof onSuccess === "function") {
-        setTimeout(() => {
-          onSuccess();
-        }, 2000);
       }
+
+      // 4. Handle success
+      onSuccess({ subscriptionId });
     } catch (err) {
-      console.error("Error in handleSubmit:", err);
-      setError(err.message);
+      console.error("Payment error:", err);
+      setError(
+        err.message || "An error occurred while processing your payment"
+      );
     } finally {
-      setLoading(false);
+      setIsProcessing(false);
     }
   };
-
-  const cardElementOptions = {
-    style: {
-      base: {
-        fontSize: "16px",
-        color: "#424770",
-        "::placeholder": { color: "#aab7c4" },
-        iconColor: theme.colors.primary,
-        // Make the layout more responsive
-        "@media (max-width: 640px)": {
-          fontSize: "14px",
-        },
-      },
-      invalid: { color: "#9e2146" },
-    },
-    hidePostalCode: true,
-  };
-
   return (
-    <div className="w-full">
-      {success ? (
-        <div
-          className="bg-green-50 p-6 rounded-lg shadow-sm border border-green-100 text-center"
-          style={{ borderColor: `${theme.colors.secondary}30` }}
-        >
-          <CheckCircle
-            size={48}
-            className="mx-auto mb-4"
-            style={{ color: theme.colors.secondary }}
-          />
-          <h3
-            className="text-xl font-bold mb-3"
-            style={{ color: theme.colors.text.primary }}
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="space-y-4">
+        <h3 className="text-lg font-medium text-gray-800 mb-2">
+          Your Information
+        </h3>
+
+        <div>
+          <label
+            htmlFor="name"
+            className="block text-sm font-medium text-gray-700 mb-1"
           >
-            Payment Successful!
-          </h3>
-          <p className="text-gray-700 mb-6">
-            Thank you for your purchase. We'll contact you within 24 hours to
-            begin setting up your Google Business Profile.
-          </p>
+            Full Name <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            required
+          />
         </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-            <h3
-              className="text-xl font-bold mb-4"
-              style={{ color: theme.colors.text.primary }}
-            >
-              Your Information
-            </h3>
-            <div className="space-y-4">
-              <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium mb-1"
-                  style={{ color: theme.colors.text.secondary }}
-                >
-                  Full Name *
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
-                  style={{ borderColor: `${theme.colors.text.secondary}30` }}
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium mb-1"
-                  style={{ color: theme.colors.text.secondary }}
-                >
-                  Email Address *
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
-                  style={{ borderColor: `${theme.colors.text.secondary}30` }}
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="phone"
-                  className="block text-sm font-medium mb-1"
-                  style={{ color: theme.colors.text.secondary }}
-                >
-                  Phone Number *
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
-                  style={{ borderColor: `${theme.colors.text.secondary}30` }}
-                />
-              </div>
-            </div>
-          </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-            <h3
-              className="text-xl font-bold mb-4"
-              style={{ color: theme.colors.text.primary }}
-            >
-              Business Information
-            </h3>
-            <div className="space-y-4">
-              <div>
-                <label
-                  htmlFor="businessName"
-                  className="block text-sm font-medium mb-1"
-                  style={{ color: theme.colors.text.secondary }}
-                >
-                  Business Name *
-                </label>
-                <input
-                  type="text"
-                  id="businessName"
-                  name="businessName"
-                  value={formData.businessName}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
-                  style={{ borderColor: `${theme.colors.text.secondary}30` }}
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="businessAddress"
-                  className="block text-sm font-medium mb-1"
-                  style={{ color: theme.colors.text.secondary }}
-                >
-                  Business Address *
-                </label>
-                <input
-                  type="text"
-                  id="businessAddress"
-                  name="businessAddress"
-                  value={formData.businessAddress}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
-                  style={{ borderColor: `${theme.colors.text.secondary}30` }}
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="website"
-                  className="block text-sm font-medium mb-1"
-                  style={{ color: theme.colors.text.secondary }}
-                >
-                  Website (if any)
-                </label>
-                <input
-                  type="url"
-                  id="website"
-                  name="website"
-                  value={formData.website}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
-                  style={{ borderColor: `${theme.colors.text.secondary}30` }}
-                />
-              </div>
-            </div>
-          </div>
+        <div>
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Email Address <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            required
+          />
+        </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-            <h3
-              className="text-xl font-bold mb-4"
-              style={{ color: theme.colors.text.primary }}
-            >
-              Payment Details
-            </h3>
-            <div className="mb-6">
-              <div className="flex items-center justify-between mb-6">
-                <span className="text-gray-700">{packageName}</span>
-                <span
-                  className="font-bold text-xl"
-                  style={{ color: theme.colors.primary }}
-                >
-                  ${packagePrice.toFixed(2)}
-                </span>
-              </div>
-              <div
-                className="bg-gray-50 p-4 rounded-lg mb-4 border"
-                style={{ borderColor: `${theme.colors.text.secondary}20` }}
-              >
-                <label
-                  className="block text-sm font-medium mb-2"
-                  style={{ color: theme.colors.text.secondary }}
-                >
-                  Card Information
-                </label>
-                <div className="p-3 bg-white rounded border border-gray-300 min-h-[60px]">
-                  <CardElement
-                    options={{
-                      ...cardElementOptions,
-                      style: {
-                        ...cardElementOptions.style,
-                        base: {
-                          ...cardElementOptions.style.base,
-                          fontSize: "16px",
-                          "@media (max-width: 640px)": {
-                            fontSize: "14px",
-                          },
-                        },
-                      },
-                      hidePostalCode: true,
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-            {error && (
-              <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg border border-red-100 flex items-center">
-                <AlertCircle size={18} className="mr-2 flex-shrink-0" />
-                <span>{error}</span>
-              </div>
-            )}
-            <div className="flex flex-col sm:flex-row gap-3">
-              <button
-                type="button"
-                onClick={onCancel}
-                className="py-3 px-6 rounded-lg font-medium border transition-all duration-300 hover:bg-gray-50 sm:order-1"
-                style={{
-                  borderColor: theme.colors.primary,
-                  color: theme.colors.primary,
-                }}
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={!stripe || loading}
-                className="py-3 px-6 rounded-lg font-medium transition-all duration-300 flex items-center justify-center sm:flex-1 sm:order-2"
-                style={{
-                  backgroundColor: theme.colors.accent,
-                  color: "white",
-                  opacity: !stripe || loading ? 0.7 : 1,
-                }}
-              >
-                {loading ? (
-                  <>
-                    <Loader size={20} className="animate-spin mr-2" />
-                    Processing...
-                  </>
-                ) : (
-                  `Pay $${packagePrice} and Get Started`
-                )}
-              </button>
-            </div>
-            <p className="mt-4 text-xs text-center text-gray-600">
-              By submitting this form, you agree to our Terms of Service and
-              Privacy Policy. Your card will be charged ${packagePrice} monthly
-              until you cancel.
-            </p>
+        <div>
+          <label
+            htmlFor="phone"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Phone Number <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            required
+          />
+        </div>
+
+        <h3 className="text-lg font-medium text-gray-800 mt-6 mb-2">
+          Business Information
+        </h3>
+
+        <div>
+          <label
+            htmlFor="businessName"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Business Name <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            id="businessName"
+            name="businessName"
+            value={formData.businessName}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            required
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="businessAddress"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Business Address <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            id="businessAddress"
+            name="businessAddress"
+            value={formData.businessAddress}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            required
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="website"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Website (if any)
+          </label>
+          <input
+            type="url"
+            id="website"
+            name="website"
+            value={formData.website}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="https://your-website.com"
+          />
+        </div>
+
+        <div className="mt-6">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Payment Details <span className="text-red-500">*</span>
+          </label>
+          <div className="p-3 border border-gray-300 rounded-md bg-white">
+            <CardElement
+              options={{
+                style: {
+                  base: {
+                    fontSize: "16px",
+                    color: "#424770",
+                    "::placeholder": {
+                      color: "#aab7c4",
+                    },
+                  },
+                  invalid: {
+                    color: "#9e2146",
+                  },
+                },
+              }}
+            />
           </div>
-        </form>
+        </div>
+      </div>
+
+      {error && (
+        <div className="p-3 bg-red-50 border border-red-200 rounded-md">
+          <p className="text-sm text-red-600">{error}</p>
+        </div>
       )}
-    </div>
+
+      <div className="flex flex-col space-y-3">
+        <button
+          type="submit"
+          disabled={!stripe || isProcessing}
+          className="w-full py-3 px-4 rounded-md font-medium text-white transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2"
+          style={{
+            backgroundColor: isProcessing ? "#9CA3AF" : theme.colors.primary,
+            opacity: isProcessing ? 0.7 : 1,
+          }}
+        >
+          {isProcessing
+            ? "Processing..."
+            : `Subscribe for $${packagePrice}/${
+                packageName === "Annual Plan" ? "year" : "month"
+              }`}
+        </button>
+
+        <button
+          type="button"
+          onClick={onCancel}
+          disabled={isProcessing}
+          className="text-gray-500 text-sm hover:text-gray-700 text-center"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
   );
 };
 

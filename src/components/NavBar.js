@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { Menu, X, ChevronRight } from "lucide-react";
 import _ from "lodash";
-import logo from "../assets/logo_new.png";
+import logo from "../assets/logo_new.webp";
 
 const SCROLL_THRESHOLD = 20;
 const SCROLL_OFFSET = 100;

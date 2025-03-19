@@ -1,19 +1,31 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Secure auditRequests collection (for GMB audit requests)
+    match /auditRequests/{requestId} {
+      allow read: if false;  // Block client-side reads
+      allow create: if 
+        request.resource.data.keys().hasAll(['name', 'email', 'businessName']) &&  // Required fields
+        request.resource.data.name is string && request.resource.data.name.size() <= 100 &&  // Name: string, max 100 chars
+        request.resource.data.email is string && request.resource.data.email.matches('^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$') &&  // Valid email
+        request.resource.data.businessName is string && request.resource.data.businessName.size() <= 200;  // Business name: string, max 200 chars
+      allow update, delete: if false;  // Prevent edits or deletes
+    }
 
-    // This rule allows anyone with your Firestore database reference to view, edit,
-    // and delete all data in your Firestore database. It is useful for getting
-    // started, but it is configured to expire after 30 days because it
-    // leaves your app open to attackers. At that time, all client
-    // requests to your Firestore database will be denied.
-    //
-    // Make sure to write security rules for your app before that time, or else
-    // all client requests to your Firestore database will be denied until you Update
-    // your rules
+    // Secure customers collection (for payment data)
+    match /customers/{customerId} {
+      allow read: if false;  // Block client-side reads
+      allow create: if 
+        request.resource.data.keys().hasAll(['name', 'email', 'paymentStatus']) &&  // Required fields (adjust as needed)
+        request.resource.data.name is string && request.resource.data.name.size() <= 100 &&  // Name: string, max 100 chars
+        request.resource.data.email is string && request.resource.data.email.matches('^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$') &&  // Valid email
+        request.resource.data.paymentStatus is string && request.resource.data.paymentStatus.size() <= 50;  // Payment status: string, max 50 chars
+      allow update, delete: if false;  // Prevent edits or deletes
+    }
+
+    // Deny access to all other collections
     match /{document=**} {
-      allow read, write: if request.time < timestamp.date(2025, 4, 14);
+      allow read, write: if false;  // Default deny for anything else
     }
   }
 }

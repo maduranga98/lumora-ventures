@@ -12,11 +12,11 @@ import {
 } from "lucide-react";
 import CheckoutForm from "./CheckoutForm";
 import { useTheme } from "../Theme";
-import logoImage from "../../assets/logo_new.png";
+import logoImage from "../../assets/logo_new.webp";
 
 // Initialize Stripe with your publishable key
 const stripePromise = loadStripe(
-  "pk_test_51QdE3AKKYKi1ENnWqURjcwjpZNxAEnc0LRFhnQevMqMfRqmcldSPrlr2BQbesNMxmQhaHaMtn3p3gP2XivGXjtxY00VoJie574"
+  "pk_live_51QdE3AKKYKi1ENnWlp28hObalgdPc1HYodrucnkwQOPgHfr1MDs9CLMI6epGE9EVunnKqDnx9r77Vs1MHbW6Kpxx00tUemv7iD"
 );
 
 const CheckoutPage = () => {

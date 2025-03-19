@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import gbpScreenshot from "../assets/gbp-screenshot.jpg";
+import gbpScreenshot from "../assets/gbp-screenshot.webp";
 import { useTheme } from "./Theme";
 import ContactForm from "../widgets/ContactForm";
 

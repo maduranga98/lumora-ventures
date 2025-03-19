@@ -6,7 +6,7 @@ import { loadStripe } from "@stripe/stripe-js";
 // Make sure to add your publishable key here
 const stripePromise = loadStripe(
   process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY ||
-    "pk_test_51QdE3AKKYKi1ENnWqURjcwjpZNxAEnc0LRFhnQevMqMfRqmcldSPrlr2BQbesNMxmQhaHaMtn3p3gP2XivGXjtxY00VoJie574"
+    "pk_live_51QdE3AKKYKi1ENnWlp28hObalgdPc1HYodrucnkwQOPgHfr1MDs9CLMI6epGE9EVunnKqDnx9r77Vs1MHbW6Kpxx00tUemv7iD"
 );
 
 const StripeProvider = ({ children }) => {

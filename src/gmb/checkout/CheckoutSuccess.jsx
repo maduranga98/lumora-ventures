@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../Theme";
 import { CheckCircle, ArrowRight } from "lucide-react";
-import logoImage from "../../assets/logo_new.png";
+import logoImage from "../../assets/logo_new.webp";
 
 const CheckoutSuccess = () => {
   const theme = useTheme();

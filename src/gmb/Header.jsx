@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import storefrontImage from "../assets/storefront-image.png";
-import backgroundImage from "../assets/header-background.jpg";
+import storefrontImage from "../assets/storefront-image.webp";
+import backgroundImage from "../assets/header-background.webp";
 import { useTheme } from "./Theme";
 import ContactForm from "../widgets/ContactForm";
 

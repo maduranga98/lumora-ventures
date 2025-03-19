@@ -6,7 +6,7 @@ import {
   Sparkle,
   ArrowRight,
 } from "lucide-react";
-import Img2 from "../assets/img2.png";
+import Img2 from "../assets/img2.webp";
 
 const AboutUs = ({ onNavClick }) => {
   // Add onNavClick prop
