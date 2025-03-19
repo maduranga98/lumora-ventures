@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useTheme } from "./Theme";
 import {
   MapPin,
@@ -13,10 +13,8 @@ import {
 
 const WhyGBPCrucial = () => {
   const theme = useTheme();
-  const [isVisible, setIsVisible] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
 
-  // Define benefits array before using it in the useEffect hook
   // Benefits of Google Business Profile
   const benefits = [
     {
@@ -88,45 +86,13 @@ const WhyGBPCrucial = () => {
     },
   ];
 
-  // Observer for scroll animations
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.15 }
-    );
-
-    const section = document.getElementById("whyGBPCrucial");
-    if (section) observer.observe(section);
-
-    return () => {
-      if (section) observer.unobserve(section);
-    };
-  }, []);
-
-  // Auto-rotate through tabs
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveTab((prev) => (prev + 1) % benefits.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [isVisible, benefits.length]);
-
   return (
     <section
       id="whyGBPCrucial"
-      className="py-20 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 bg-white overflow-hidden"
+      className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 bg-white"
     >
       <div className="mx-auto max-w-7xl">
-        <div
-          className={`text-center mb-12 transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-          }`}
-        >
+        <div className="text-center mb-12">
           <span
             className="inline-block px-4 py-1 rounded-full text-sm font-medium mb-3"
             style={{
@@ -149,24 +115,19 @@ const WhyGBPCrucial = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex flex-col lg:flex-row gap-12 items-center">
+        <div className="flex flex-col lg:flex-row gap-12 items-start">
           {/* Left side - Benefits List */}
           <div className="w-full lg:w-1/2">
             <div className="space-y-6">
               {benefits.map((benefit, index) => (
                 <div
                   key={index}
-                  className={`p-5 rounded-lg cursor-pointer transition-all duration-500 transform ${
+                  className={`p-5 rounded-lg cursor-pointer ${
                     activeTab === index
-                      ? "bg-gray-50 shadow-md scale-105"
+                      ? "bg-gray-50 shadow-md"
                       : "hover:bg-gray-50 hover:shadow-sm"
-                  } ${
-                    isVisible
-                      ? "opacity-100 translate-x-0"
-                      : "opacity-0 -translate-x-10"
                   }`}
                   style={{
-                    transitionDelay: `${100 * index}ms`,
                     borderLeft:
                       activeTab === index
                         ? `4px solid ${theme.colors.secondary}`
@@ -176,7 +137,7 @@ const WhyGBPCrucial = () => {
                 >
                   <div className="flex items-start">
                     <div
-                      className={`mr-4 transition-all duration-300 ${
+                      className={`mr-4 ${
                         activeTab === index
                           ? "text-secondary-500"
                           : "text-gray-400"
@@ -192,7 +153,7 @@ const WhyGBPCrucial = () => {
                     </div>
                     <div>
                       <h3
-                        className={`text-xl font-semibold mb-1 transition-all duration-300 ${
+                        className={`text-xl font-semibold mb-1 ${
                           activeTab === index ? "" : "text-gray-700"
                         }`}
                         style={{
@@ -205,9 +166,9 @@ const WhyGBPCrucial = () => {
                         {benefit.title}
                       </h3>
                       <p
-                        className={`text-sm ${
+                        className={`text-sm text-gray-600 ${
                           activeTab === index ? "block" : "hidden md:block"
-                        } text-gray-600`}
+                        }`}
                       >
                         {benefit.description}
                       </p>
@@ -220,14 +181,8 @@ const WhyGBPCrucial = () => {
 
           {/* Right side - Feature Highlight */}
           <div className="w-full lg:w-1/2">
-            <div
-              className={`bg-gray-50 rounded-xl p-8 shadow-lg transition-all duration-700 ${
-                isVisible
-                  ? "opacity-100 translate-x-0"
-                  : "opacity-0 translate-x-10"
-              }`}
-            >
-              <div className="relative overflow-hidden rounded-lg bg-white p-8 shadow-inner h-full">
+            <div className="bg-gray-50 rounded-xl p-8 shadow-lg">
+              <div className="relative overflow-hidden rounded-lg bg-white p-8 shadow-inner">
                 {/* Background gradient */}
                 <div
                   className="absolute inset-0 opacity-5"
@@ -279,12 +234,8 @@ const WhyGBPCrucial = () => {
           </div>
         </div>
 
-        {/* Key statistics summary section to replace the testimonial */}
-        <div
-          className={`mt-16 bg-gray-50 rounded-xl overflow-hidden shadow-md transition-all duration-700 delay-300 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-          }`}
-        >
+        {/* Key statistics summary section */}
+        <div className="mt-16 bg-gray-50 rounded-xl overflow-hidden shadow-md">
           <div className="p-8 relative">
             {/* Decorative elements */}
             <div

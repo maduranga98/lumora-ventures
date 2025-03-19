@@ -5,7 +5,7 @@ import Header from "./Header";
 import WhatIsGBP from "./WhatIsGBP";
 import Packages from "./Packages";
 import Footer from "./Footer";
-import logoImage from "../assets/logo_new.png";
+import logoImage from "../assets/logo_new.webp";
 import WhyGBPCrucial from "./WhyGMB";
 import WhyChooseLumora from "./WhyChooseLumora";
 import FAQSection from "./FAQSection";
@@ -153,14 +153,14 @@ const GmbPage = () => {
   };
 
   return (
-    <div className="bg-gradient-to-b from-indigo-50 to-white min-h-screen">
+    <div className="bg-gradient-to-b from-indigo-50 to-white min-h-screen overflow-x-hidden">
       {/* Navigation bar with expanded options */}
       <nav
         className={`${
           scrollPosition > 50
             ? "py-2 bg-white/95 backdrop-blur-sm"
             : "py-4 bg-white"
-        } shadow-sm sticky top-0 z-50 transition-all duration-300`}
+        } shadow-sm fixed top-0 left-0 right-0 z-50 transition-all duration-300`}
       >
         {/* Updated container with better responsiveness for larger screens */}
         <div className="mx-auto px-4 lg:px-8 max-w-full">
@@ -223,7 +223,7 @@ const GmbPage = () => {
 
         {/* Mobile Navigation Dropdown */}
         {isMenuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-100 mt-2 py-4 px-4 shadow-lg animate-fadeIn">
+          <div className="md:hidden fixed inset-x-0 top-full bg-white border-t border-gray-100 py-4 px-4 shadow-lg animate-fadeIn z-50">
             <div className="flex flex-col space-y-2">
               {navItems.slice(0, -1).map((item) => (
                 <button
@@ -250,7 +250,7 @@ const GmbPage = () => {
       </nav>
 
       {/* Main content */}
-      <main>
+      <main className="pt-24 sm:pt-20 md:pt-20">
         <div id="home">
           <Header />
         </div>

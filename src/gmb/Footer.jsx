@@ -9,7 +9,7 @@ import {
   Instagram,
   Linkedin,
 } from "lucide-react";
-import logo from "../assets/logo_new.png";
+import logo from "../assets/logo_new.webp";
 
 const Footer = ({ onNavClick }) => {
   // Navigation links with section IDs that match your page structure
@@ -177,11 +177,7 @@ const Footer = ({ onNavClick }) => {
                 <address className="text-sm not-italic leading-loose group-hover:text-[#ECAF41] transition-colors">
                   Office 4157, 58 Peregrine Road
                   <br />
-                  Hainault
-                  <br />
-                  Ilford
-                  <br />
-                  Essex
+                  Hainault, Ilford, Essex
                   <br />
                   United Kingdom
                   <br />

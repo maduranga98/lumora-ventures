@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { ArrowRight } from "lucide-react";
-import heroImage from "../assets/img1.png";
+import heroImage from "../assets/img1.webp";
 
 const Hero = ({ onNavClick }) => {
   useEffect(() => {
