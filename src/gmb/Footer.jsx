@@ -55,8 +55,8 @@ const Footer = ({ onNavClick }) => {
     },
     {
       Icon: Phone,
-      text: "+94-71-999-8500",
-      href: "tel:+94719998500",
+      text: "+18-57-75-45044",
+      href: "tel:+18577545044",
     },
   ];
 
