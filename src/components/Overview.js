@@ -82,18 +82,18 @@ const Overview = ({ onNavClick }) => {
                 }`}
                 style={{ animationDelay: `${index * 200}ms` }}
               >
-                <div className="flip-card hover-scale">
-                  {/* Front Side */}
+                <div className="flip-card">
+                  {/* Front Side - Keeping your original content structure */}
                   <div className="flip-card-front">
                     <div
                       className="h-full bg-white/95 backdrop-blur-sm rounded-xl p-8 
-                                  flex flex-col items-center justify-center text-center 
-                                  shadow-lg border-2 border-white/80"
+                      flex flex-col items-center justify-center text-center 
+                      shadow-lg border-2 border-white/80"
                     >
                       <span
                         className="inline-flex items-center justify-center p-4 
-                                     bg-gradient-to-r from-[#09122C] to-[#1A2A5F] 
-                                     rounded-xl shadow-lg animate-bounce-subtle"
+                         bg-gradient-to-r from-[#09122C] to-[#1A2A5F] 
+                         rounded-xl shadow-lg animate-bounce-subtle"
                       >
                         <highlight.icon
                           className="h-8 w-8 text-[#ECAF41]"
@@ -106,12 +106,12 @@ const Overview = ({ onNavClick }) => {
                     </div>
                   </div>
 
-                  {/* Back Side */}
+                  {/* Back Side - Keeping your original content structure */}
                   <div className="flip-card-back">
                     <div
                       className="h-full bg-gradient-to-br from-[#09122C] to-[#ECAF41] 
-                                  rounded-xl p-8 flex flex-col items-center justify-center 
-                                  text-center shadow-lg"
+                      rounded-xl p-8 flex flex-col items-center justify-center 
+                      text-center shadow-lg"
                     >
                       <p className="text-white text-lg leading-relaxed">
                         {highlight.description}
