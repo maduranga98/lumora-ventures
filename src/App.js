@@ -22,6 +22,7 @@ import TermsAndConditions from "./components/TermAndConditions";
 import GmbPage from "./gmb/GmbPage";
 import CheckoutPage from "./gmb/checkout/CheckoutPage";
 import CheckoutSuccess from "./gmb/checkout/CheckoutSuccess";
+import AutomationPage from "./automation/IndustrialAutomation";
 
 const SECTION_OFFSET = 80;
 const SCROLL_THRESHOLD = 100;
@@ -80,6 +81,13 @@ const Layout = ({ children }) => {
   const [lastScrollY, setLastScrollY] = useState(0);
 
   const isMainPage = location.pathname === "/";
+  const isStandalonePage = [
+    "/automation",
+    "/gmb",
+    "/checkout",
+    "/checkout/success",
+  ].includes(location.pathname);
+  const showMainLayout = isMainPage || !isStandalonePage;
 
   const scrollToSection = useCallback(
     (sectionId) => {
@@ -147,7 +155,7 @@ const Layout = ({ children }) => {
 
   return (
     <div className="relative min-h-screen bg-[#EEE8F5]">
-      {isMainPage && (
+      {showMainLayout && (
         <Navbar
           activeSection={activeSection}
           onNavClick={scrollToSection}
@@ -158,11 +166,13 @@ const Layout = ({ children }) => {
         />
       )}
       <div
-        className={`${isMainPage ? "pt-10" : ""} transition-all duration-300`}
+        className={`${
+          showMainLayout ? "pt-20" : ""
+        } transition-all duration-300`}
       >
         {children}
       </div>
-      {isMainPage && (
+      {showMainLayout && (
         <Footer
           onNavClick={scrollToSection}
           className="bg-[#3D52A2] text-[#EEE8F5]"
@@ -182,6 +192,7 @@ function App() {
             <Route path="/gmb" element={<GmbPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/checkout/success" element={<CheckoutSuccess />} />
+            <Route path="/automation" element={<AutomationPage />} />
             <Route
               path="/privacy-policy"
               element={
