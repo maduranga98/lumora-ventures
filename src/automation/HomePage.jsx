@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
+// src/automation/HomePage.js
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import heroGif from "../assets/hero.gif";
+import AutomationContactForm from "./AutomationContactForm";
 
 const fadeIn = {
   hidden: { opacity: 0 },
@@ -24,6 +26,9 @@ const slideUp = {
 };
 
 const HomePage = () => {
+  // Contact form modal state
+  const [isContactFormOpen, setIsContactFormOpen] = useState(false);
+
   // Preload the hero GIF to ensure it's available when rendered
   useEffect(() => {
     const img = new Image();
@@ -39,6 +44,12 @@ const HomePage = () => {
           content="Discover Lumora Ventures' industrial automation solutions—control systems, HMI & VFD programming, panel wiring, R&D, and maintenance. Optimize today!"
         />
       </Helmet>
+
+      {/* Contact Form Modal */}
+      <AutomationContactForm
+        isOpen={isContactFormOpen}
+        onClose={() => setIsContactFormOpen(false)}
+      />
 
       {/* Hero Section - Full Screen with GIF Background */}
       <section className="relative h-screen flex items-center overflow-hidden">
@@ -89,14 +100,14 @@ const HomePage = () => {
                 variants={slideUp}
                 className="flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-8 2xl:gap-10 justify-center"
               >
-                <Link
-                  to="#"
+                <button
+                  onClick={() => setIsContactFormOpen(true)}
                   className="px-6 sm:px-8 md:px-12 2xl:px-16 py-4 sm:py-5 md:py-6 2xl:py-8 bg-cyan-500 hover:bg-cyan-600 text-white text-base sm:text-lg md:text-xl 2xl:text-2xl font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-cyan-500/30"
                 >
                   Revolutionize Your Plant →
-                </Link>
+                </button>
                 <Link
-                  to="#"
+                  to="#services"
                   className="px-6 sm:px-8 md:px-12 2xl:px-16 py-4 sm:py-5 md:py-6 2xl:py-8 border-2 border-cyan-400/30 text-cyan-400 text-base sm:text-lg md:text-xl 2xl:text-2xl hover:border-cyan-400/60 font-bold rounded-xl transition-all duration-300 hover:bg-cyan-500/10"
                 >
                   Explore Solutions
@@ -108,7 +119,10 @@ const HomePage = () => {
       </section>
 
       {/* Services Section */}
-      <section className="relative py-12 sm:py-16 md:py-24 2xl:py-32 bg-gray-900/50 backdrop-blur-xl">
+      <section
+        id="services"
+        className="relative py-12 sm:py-16 md:py-24 2xl:py-32 bg-gray-900/50 backdrop-blur-xl"
+      >
         <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12">
           <motion.div
             initial={{ opacity: 0 }}
@@ -173,12 +187,12 @@ const HomePage = () => {
               that deliver 200% ROI within 18 months
             </p>
             <div className="flex justify-center">
-              <Link
-                to="#"
+              <button
+                onClick={() => setIsContactFormOpen(true)}
                 className="px-6 sm:px-8 md:px-14 2xl:px-16 py-3 sm:py-4 md:py-6 2xl:py-8 bg-cyan-500 hover:bg-cyan-600 text-white text-base sm:text-lg md:text-xl 2xl:text-2xl font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-xl shadow-cyan-500/20"
               >
                 Schedule Free Consultation
-              </Link>
+              </button>
             </div>
           </motion.div>
         </div>

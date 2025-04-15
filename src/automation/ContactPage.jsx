@@ -1,8 +1,9 @@
 // src/automation/ContactPage.js
-import React from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "../firebase";
 
 const fadeIn = {
   hidden: { opacity: 0 },
@@ -15,6 +16,68 @@ const slideUp = {
 };
 
 const ContactPage = () => {
+  // State for the technical inquiry form
+  const [technicalFormData, setTechnicalFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    systemType: "",
+    urgencyLevel: "Routine",
+    technicalDetails: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formSuccess, setFormSuccess] = useState(false);
+  const [formError, setFormError] = useState(null);
+
+  // Handle input changes for technical form
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setTechnicalFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Handle technical form submission
+  const handleTechnicalFormSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setFormError(null);
+
+    try {
+      // Save data to Firebase in technical inquiries collection
+      await addDoc(collection(db, "technicalInquiries"), {
+        ...technicalFormData,
+        createdAt: serverTimestamp(),
+        status: "new",
+        source: "contact-page",
+      });
+
+      // Show success message
+      setFormSuccess(true);
+
+      // Reset form after 5 seconds
+      setTimeout(() => {
+        setFormSuccess(false);
+        setTechnicalFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          systemType: "",
+          urgencyLevel: "Routine",
+          technicalDetails: "",
+        });
+      }, 5000);
+    } catch (error) {
+      console.error("Error saving technical inquiry:", error);
+      setFormError(
+        "There was an error submitting your request. Please try again."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-blue-900">
       <Helmet>
@@ -74,96 +137,203 @@ const ContactPage = () => {
                 <h2 className="text-xl sm:text-2xl md:text-3xl 2xl:text-4xl font-bold text-white mb-4 sm:mb-6 md:mb-8 2xl:mb-10">
                   Technical Inquiry
                 </h2>
-                <form className="space-y-4 sm:space-y-6 2xl:space-y-8">
-                  <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 2xl:gap-8">
+
+                {formSuccess ? (
+                  <div className="bg-cyan-500/20 border border-cyan-400 text-cyan-300 p-6 rounded-xl text-center">
+                    <div className="text-cyan-400 text-5xl mb-4">✓</div>
+                    <h3 className="text-xl font-bold mb-2">
+                      Thank You For Your Inquiry!
+                    </h3>
+                    <p className="text-lg mb-4">
+                      Your technical request has been successfully submitted.
+                    </p>
+                    <p>
+                      Our engineering team will review your requirements and
+                      reach out within 24 hours to discuss your automation
+                      needs.
+                    </p>
+                  </div>
+                ) : (
+                  <form
+                    onSubmit={handleTechnicalFormSubmit}
+                    className="space-y-4 sm:space-y-6 2xl:space-y-8"
+                  >
+                    {formError && (
+                      <div className="bg-red-900/30 border border-red-800 text-red-300 p-4 rounded-xl">
+                        {formError}
+                      </div>
+                    )}
+
+                    <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 2xl:gap-8">
+                      <div>
+                        <label
+                          htmlFor="firstName"
+                          className="block text-gray-400 mb-1 sm:mb-2 2xl:mb-3 text-sm sm:text-base 2xl:text-lg"
+                        >
+                          First Name*
+                        </label>
+                        <input
+                          type="text"
+                          id="firstName"
+                          name="firstName"
+                          value={technicalFormData.firstName}
+                          onChange={handleInputChange}
+                          className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-900 text-white rounded-lg focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="lastName"
+                          className="block text-gray-400 mb-1 sm:mb-2 2xl:mb-3 text-sm sm:text-base 2xl:text-lg"
+                        >
+                          Last Name*
+                        </label>
+                        <input
+                          type="text"
+                          id="lastName"
+                          name="lastName"
+                          value={technicalFormData.lastName}
+                          onChange={handleInputChange}
+                          className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-900 text-white rounded-lg focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
+                          required
+                        />
+                      </div>
+                    </div>
+
                     <div>
-                      <label className="block text-gray-400 mb-1 sm:mb-2 2xl:mb-3 text-sm sm:text-base 2xl:text-lg">
-                        First Name*
+                      <label
+                        htmlFor="email"
+                        className="block text-gray-400 mb-1 sm:mb-2 2xl:mb-3 text-sm sm:text-base 2xl:text-lg"
+                      >
+                        Email*
                       </label>
                       <input
-                        type="text"
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={technicalFormData.email}
+                        onChange={handleInputChange}
                         className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-900 text-white rounded-lg focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
                         required
                       />
                     </div>
+
+                    <div>
+                      <label
+                        htmlFor="systemType"
+                        className="block text-gray-400 mb-1 sm:mb-2 2xl:mb-3 text-sm sm:text-base 2xl:text-lg"
+                      >
+                        System Type
+                      </label>
+                      <select
+                        id="systemType"
+                        name="systemType"
+                        value={technicalFormData.systemType}
+                        onChange={handleInputChange}
+                        className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-900 text-white rounded-lg focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
+                      >
+                        <option value="">Select Automation System</option>
+                        <option value="HMI Networks">HMI Networks</option>
+                        <option value="VFD Arrays">VFD Arrays</option>
+                        <option value="PLC Systems">PLC Systems</option>
+                        <option value="SCADA Solutions">SCADA Solutions</option>
+                        <option value="Full Control Stack">
+                          Full Control Stack
+                        </option>
+                        <option value="R&D Project">R&D Project</option>
+                        <option value="Maintenance Services">
+                          Maintenance Services
+                        </option>
+                      </select>
+                    </div>
+
                     <div>
                       <label className="block text-gray-400 mb-1 sm:mb-2 2xl:mb-3 text-sm sm:text-base 2xl:text-lg">
-                        Last Name*
+                        Urgency Level
                       </label>
-                      <input
-                        type="text"
-                        className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-900 text-white rounded-lg focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-gray-400 mb-1 sm:mb-2 2xl:mb-3 text-sm sm:text-base 2xl:text-lg">
-                      Email*
-                    </label>
-                    <input
-                      type="email"
-                      className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-900 text-white rounded-lg focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-gray-400 mb-1 sm:mb-2 2xl:mb-3 text-sm sm:text-base 2xl:text-lg">
-                      System Type
-                    </label>
-                    <select className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-900 text-white rounded-lg focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg">
-                      <option>Select Automation System</option>
-                      <option>HMI Networks</option>
-                      <option>VFD Arrays</option>
-                      <option>Full Control Stack</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-gray-400 mb-1 sm:mb-2 2xl:mb-3 text-sm sm:text-base 2xl:text-lg">
-                      Urgency Level
-                    </label>
-                    <div className="grid grid-cols-3 gap-2 sm:gap-4 2xl:gap-6">
-                      {["Routine", "Priority", "Emergency"].map(
-                        (level, index) => (
+                      <div className="grid grid-cols-3 gap-2 sm:gap-4 2xl:gap-6">
+                        {["Routine", "Priority", "Emergency"].map((level) => (
                           <label
-                            key={index}
-                            className="flex items-center space-x-1 sm:space-x-2 2xl:space-x-3"
+                            key={level}
+                            className={`flex items-center justify-center px-4 py-3 rounded-lg cursor-pointer border transition-all ${
+                              technicalFormData.urgencyLevel === level
+                                ? "border-cyan-500 bg-cyan-500/10 text-cyan-400"
+                                : "border-gray-700 text-gray-300 hover:bg-gray-800/50"
+                            }`}
                           >
                             <input
                               type="radio"
-                              name="urgency"
-                              className="text-cyan-500 focus:ring-cyan-500 w-4 h-4 2xl:w-5 2xl:h-5"
+                              name="urgencyLevel"
+                              value={level}
+                              checked={technicalFormData.urgencyLevel === level}
+                              onChange={handleInputChange}
+                              className="sr-only"
                             />
-                            <span className="text-gray-300 text-sm sm:text-base 2xl:text-lg">
-                              {level}
-                            </span>
+                            <span>{level}</span>
                           </label>
-                        )
-                      )}
+                        ))}
+                      </div>
                     </div>
-                  </div>
 
-                  <div>
-                    <label className="block text-gray-400 mb-1 sm:mb-2 2xl:mb-3 text-sm sm:text-base 2xl:text-lg">
-                      Technical Details
-                    </label>
-                    <textarea
-                      rows="4"
-                      className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-900 text-white rounded-lg focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
-                      placeholder="Describe your system requirements, challenges, and desired outcomes..."
-                    ></textarea>
-                  </div>
+                    <div>
+                      <label
+                        htmlFor="technicalDetails"
+                        className="block text-gray-400 mb-1 sm:mb-2 2xl:mb-3 text-sm sm:text-base 2xl:text-lg"
+                      >
+                        Technical Details*
+                      </label>
+                      <textarea
+                        id="technicalDetails"
+                        name="technicalDetails"
+                        value={technicalFormData.technicalDetails}
+                        onChange={handleInputChange}
+                        rows="4"
+                        className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-900 text-white rounded-lg focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
+                        placeholder="Describe your system requirements, challenges, and desired outcomes..."
+                        required
+                      ></textarea>
+                    </div>
 
-                  <button
-                    type="submit"
-                    className="w-full px-4 sm:px-6 2xl:px-8 py-2 sm:py-3 md:py-4 2xl:py-6 bg-cyan-500 hover:bg-cyan-600 text-white text-sm sm:text-base 2xl:text-lg font-bold rounded-lg transition-all duration-300 transform hover:scale-[1.02]"
-                  >
-                    Submit Technical Request
-                  </button>
-                </form>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={`w-full px-4 sm:px-6 2xl:px-8 py-2 sm:py-3 md:py-4 2xl:py-6 text-white text-sm sm:text-base 2xl:text-lg font-bold rounded-lg transition-all duration-300 transform hover:scale-[1.02] ${
+                        isSubmitting
+                          ? "bg-gray-600 cursor-not-allowed"
+                          : "bg-cyan-500 hover:bg-cyan-600"
+                      }`}
+                    >
+                      {isSubmitting ? (
+                        <div className="flex items-center justify-center">
+                          <svg
+                            className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                          Processing...
+                        </div>
+                      ) : (
+                        "Submit Technical Request"
+                      )}
+                    </button>
+                  </form>
+                )}
               </div>
             </motion.div>
 
@@ -260,40 +430,6 @@ const ContactPage = () => {
           </div>
         </div>
       </section>
-
-      {/* CTA Section */}
-      <div className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 py-12 sm:py-16 md:py-24 2xl:py-32">
-        <div className="w-full max-w-6xl 2xl:max-w-7xl mx-auto px-4 sm:px-6 md:px-8 2xl:px-12 text-center">
-          <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            viewport={{ once: true }}
-            className="bg-gray-900 p-6 sm:p-8 md:p-12 2xl:p-16 rounded-3xl shadow-2xl border border-cyan-400/20"
-          >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl 2xl:text-5xl font-black text-white mb-3 sm:mb-4 md:mb-6 2xl:mb-8">
-              Need Immediate Assistance?
-            </h2>
-            <p className="text-base sm:text-lg md:text-xl 2xl:text-2xl text-gray-300 mb-4 sm:mb-6 md:mb-8 2xl:mb-10 max-w-3xl 2xl:max-w-4xl mx-auto">
-              Our certified automation engineers are ready to resolve your
-              technical challenges
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 2xl:gap-8 justify-center">
-              <a
-                href="tel:+15551234567"
-                className="px-6 sm:px-8 md:px-10 2xl:px-12 py-3 sm:py-4 md:py-5 2xl:py-6 bg-cyan-500 hover:bg-cyan-600 text-white text-sm sm:text-base md:text-lg 2xl:text-xl font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-xl shadow-cyan-500/20"
-              >
-                Call Emergency Support
-              </a>
-              <Link
-                to="/maintenance"
-                className="px-6 sm:px-8 md:px-10 2xl:px-12 py-3 sm:py-4 md:py-5 2xl:py-6 border-2 border-cyan-400/30 text-cyan-400 text-sm sm:text-base md:text-lg 2xl:text-xl hover:border-cyan-400/60 font-bold rounded-xl transition-all duration-300 hover:bg-cyan-500/10"
-              >
-                View Maintenance Plans
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </div>
     </div>
   );
 };

@@ -1,8 +1,10 @@
 // src/automation/AutomationControlPage.js
-import React from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "../firebase";
+import AutomationContactForm from "./AutomationContactForm";
 
 const fadeIn = {
   hidden: { opacity: 0 },
@@ -15,6 +17,65 @@ const slideUp = {
 };
 
 const AutomationControlPage = () => {
+  // State for contact form modal
+  const [isContactFormOpen, setIsContactFormOpen] = useState(false);
+
+  // State for the quick contact form
+  const [quickFormData, setQuickFormData] = useState({
+    plantName: "",
+    contactEmail: "",
+    requirements: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formSuccess, setFormSuccess] = useState(false);
+  const [formError, setFormError] = useState(null);
+
+  // Handle input changes for quick form
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setQuickFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Handle quick form submission
+  const handleQuickFormSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setFormError(null);
+
+    try {
+      // Save data to Firebase in a different collection
+      await addDoc(collection(db, "technicalProposals"), {
+        ...quickFormData,
+        createdAt: serverTimestamp(),
+        status: "new",
+        source: "quick-form",
+      });
+
+      // Show success message
+      setFormSuccess(true);
+
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        setFormSuccess(false);
+        setQuickFormData({
+          plantName: "",
+          contactEmail: "",
+          requirements: "",
+        });
+      }, 3000);
+    } catch (error) {
+      console.error("Error saving form data:", error);
+      setFormError(
+        "There was an error submitting your request. Please try again."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-blue-900">
       <Helmet>
@@ -30,6 +91,12 @@ const AutomationControlPage = () => {
           content="Industrial automation, control systems, HMI programming, VFD programming, panel wiring, process optimization"
         />
       </Helmet>
+
+      {/* Contact Form Modal */}
+      <AutomationContactForm
+        isOpen={isContactFormOpen}
+        onClose={() => setIsContactFormOpen(false)}
+      />
 
       {/* Hero Section */}
       <section className="relative pt-16 sm:pt-24 md:pt-32 2xl:pt-40 pb-12 sm:pb-16 md:pb-24 2xl:pb-32 overflow-hidden">
@@ -63,12 +130,12 @@ const AutomationControlPage = () => {
             </motion.p>
 
             <motion.div variants={slideUp}>
-              <Link
-                to="#contact-form"
+              <button
+                onClick={() => setIsContactFormOpen(true)}
                 className="inline-block px-6 sm:px-8 md:px-10 2xl:px-14 py-3 sm:py-4 md:py-5 2xl:py-6 bg-cyan-500 hover:bg-cyan-600 text-white text-sm sm:text-base md:text-lg 2xl:text-xl font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-cyan-500/30"
               >
                 Optimize Your Systems Now →
-              </Link>
+              </button>
             </motion.div>
           </motion.div>
         </div>
@@ -241,32 +308,99 @@ const AutomationControlPage = () => {
                 <h3 className="text-lg sm:text-xl md:text-2xl 2xl:text-3xl font-bold text-white mb-3 sm:mb-4 md:mb-6 2xl:mb-8">
                   System Consultation
                 </h3>
-                <form className="space-y-3 sm:space-y-4 md:space-y-6 2xl:space-y-8">
-                  <div>
-                    <input
-                      type="text"
-                      placeholder="Plant Name"
-                      className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-800 text-white rounded-lg placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
-                    />
+
+                {formSuccess ? (
+                  <div className="bg-cyan-500/20 border border-cyan-400 text-cyan-300 p-4 rounded-xl text-center">
+                    <p className="text-lg font-medium mb-2">
+                      Thank you for your interest!
+                    </p>
+                    <p>
+                      Your proposal request has been received. Our technical
+                      team will contact you shortly.
+                    </p>
                   </div>
-                  <div>
-                    <input
-                      type="email"
-                      placeholder="Technical Contact"
-                      className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-800 text-white rounded-lg placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
-                    />
-                  </div>
-                  <div>
-                    <textarea
-                      rows="3"
-                      placeholder="System Requirements"
-                      className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-800 text-white rounded-lg placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
-                    ></textarea>
-                  </div>
-                  <button className="w-full px-4 sm:px-6 2xl:px-8 py-2 sm:py-3 md:py-4 2xl:py-5 bg-cyan-500 hover:bg-cyan-600 text-white text-sm sm:text-base 2xl:text-lg font-bold rounded-lg transition-all duration-300 transform hover:scale-[1.02]">
-                    Request Technical Proposal
-                  </button>
-                </form>
+                ) : (
+                  <form
+                    onSubmit={handleQuickFormSubmit}
+                    className="space-y-3 sm:space-y-4 md:space-y-6 2xl:space-y-8"
+                  >
+                    {formError && (
+                      <div className="bg-red-900/30 border border-red-800 text-red-300 p-4 rounded-xl">
+                        {formError}
+                      </div>
+                    )}
+                    <div>
+                      <input
+                        type="text"
+                        name="plantName"
+                        value={quickFormData.plantName}
+                        onChange={handleInputChange}
+                        placeholder="Plant Name"
+                        required
+                        className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-800 text-white rounded-lg placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
+                      />
+                    </div>
+                    <div>
+                      <input
+                        type="email"
+                        name="contactEmail"
+                        value={quickFormData.contactEmail}
+                        onChange={handleInputChange}
+                        placeholder="Technical Contact Email"
+                        required
+                        className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-800 text-white rounded-lg placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
+                      />
+                    </div>
+                    <div>
+                      <textarea
+                        rows="3"
+                        name="requirements"
+                        value={quickFormData.requirements}
+                        onChange={handleInputChange}
+                        placeholder="System Requirements"
+                        required
+                        className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-800 text-white rounded-lg placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
+                      ></textarea>
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={`w-full px-4 sm:px-6 2xl:px-8 py-2 sm:py-3 md:py-4 2xl:py-5 text-white text-sm sm:text-base 2xl:text-lg font-bold rounded-lg transition-all duration-300 transform hover:scale-[1.02] ${
+                        isSubmitting
+                          ? "bg-gray-600 cursor-not-allowed"
+                          : "bg-cyan-500 hover:bg-cyan-600"
+                      }`}
+                    >
+                      {isSubmitting ? (
+                        <div className="flex items-center justify-center">
+                          <svg
+                            className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                          Processing...
+                        </div>
+                      ) : (
+                        "Request Technical Proposal"
+                      )}
+                    </button>
+                  </form>
+                )}
               </div>
             </motion.div>
           </div>
