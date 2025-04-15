@@ -1,7 +1,10 @@
 // src/automation/MaintenanceAgreementsPage.js
-import React from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "../firebase";
+import AutomationContactForm from "./AutomationContactForm";
 
 const fadeIn = {
   hidden: { opacity: 0 },
@@ -23,6 +26,67 @@ const slideUp = {
 };
 
 const MaintenanceAgreementsPage = () => {
+  // State for contact form modal
+  const [isContactFormOpen, setIsContactFormOpen] = useState(false);
+
+  // State for the maintenance form
+  const [maintenanceFormData, setMaintenanceFormData] = useState({
+    systemType: "",
+    companyName: "",
+    email: "",
+    maintenanceNeeds: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formSuccess, setFormSuccess] = useState(false);
+  const [formError, setFormError] = useState(null);
+
+  // Handle input changes for maintenance form
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setMaintenanceFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Handle maintenance form submission
+  const handleMaintenanceFormSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setFormError(null);
+
+    try {
+      // Save data to Firebase in maintenance plans collection
+      await addDoc(collection(db, "maintenancePlans"), {
+        ...maintenanceFormData,
+        createdAt: serverTimestamp(),
+        status: "new",
+        source: "maintenance-page",
+      });
+
+      // Show success message
+      setFormSuccess(true);
+
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        setFormSuccess(false);
+        setMaintenanceFormData({
+          systemType: "",
+          companyName: "",
+          email: "",
+          maintenanceNeeds: "",
+        });
+      }, 3000);
+    } catch (error) {
+      console.error("Error saving maintenance form data:", error);
+      setFormError(
+        "There was an error submitting your request. Please try again."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-blue-900">
       <Helmet>
@@ -36,6 +100,12 @@ const MaintenanceAgreementsPage = () => {
           content="Industrial maintenance agreements, automation system upkeep, HMI maintenance, VFD maintenance, panel wiring support"
         />
       </Helmet>
+
+      {/* Contact Form Modal */}
+      <AutomationContactForm
+        isOpen={isContactFormOpen}
+        onClose={() => setIsContactFormOpen(false)}
+      />
 
       {/* Hero Section */}
       <section className="relative pt-16 sm:pt-24 md:pt-32 2xl:pt-40 pb-12 sm:pb-16 md:pb-24 2xl:pb-32 overflow-hidden">
@@ -68,7 +138,15 @@ const MaintenanceAgreementsPage = () => {
               engineering support.
             </motion.p>
 
-            {/* Removed "Secure Your Operations Now" button */}
+            {/* Add button to open full contact form */}
+            <motion.div variants={slideUp}>
+              <button
+                onClick={() => setIsContactFormOpen(true)}
+                className="inline-block px-6 sm:px-8 md:px-10 2xl:px-14 py-3 sm:py-4 md:py-5 2xl:py-6 bg-cyan-500 hover:bg-cyan-600 text-white text-sm sm:text-base md:text-lg 2xl:text-xl font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-cyan-500/30"
+              >
+                Secure Your Operations Now →
+              </button>
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -173,40 +251,119 @@ const MaintenanceAgreementsPage = () => {
                 <h3 className="text-lg sm:text-xl md:text-2xl 2xl:text-3xl font-bold text-white mb-3 sm:mb-4 md:mb-6 2xl:mb-8">
                   Request More Information
                 </h3>
-                <form className="space-y-3 sm:space-y-4 md:space-y-6 2xl:space-y-8">
-                  <div>
-                    <select className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg">
-                      <option>Select System Type</option>
-                      <option>HMI Networks</option>
-                      <option>VFD Arrays</option>
-                      <option>Full Automation Stack</option>
-                    </select>
+
+                {formSuccess ? (
+                  <div className="bg-cyan-500/20 border border-cyan-400 text-cyan-300 p-4 rounded-xl text-center">
+                    <p className="text-lg font-medium mb-2">
+                      Thank you for your interest!
+                    </p>
+                    <p>
+                      Your maintenance plan request has been received. Our
+                      support team will contact you shortly with a custom
+                      maintenance solution.
+                    </p>
                   </div>
-                  <div>
-                    <input
-                      type="text"
-                      placeholder="Company Name"
-                      className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-800 text-white rounded-lg placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
-                    />
-                  </div>
-                  <div>
-                    <input
-                      type="email"
-                      placeholder="Email Address"
-                      className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-800 text-white rounded-lg placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
-                    />
-                  </div>
-                  <div>
-                    <textarea
-                      placeholder="Tell us about your maintenance needs"
-                      rows="3"
-                      className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-800 text-white rounded-lg placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
-                    ></textarea>
-                  </div>
-                  <button className="w-full px-4 sm:px-6 2xl:px-8 py-2 sm:py-3 md:py-4 2xl:py-6 bg-cyan-500 hover:bg-cyan-600 text-white text-sm sm:text-base 2xl:text-lg font-bold rounded-lg transition-all duration-300 transform hover:scale-[1.02]">
-                    Get Custom Maintenance Plan
-                  </button>
-                </form>
+                ) : (
+                  <form
+                    onSubmit={handleMaintenanceFormSubmit}
+                    className="space-y-3 sm:space-y-4 md:space-y-6 2xl:space-y-8"
+                  >
+                    {formError && (
+                      <div className="bg-red-900/30 border border-red-800 text-red-300 p-4 rounded-xl">
+                        {formError}
+                      </div>
+                    )}
+                    <div>
+                      <select
+                        name="systemType"
+                        value={maintenanceFormData.systemType}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
+                      >
+                        <option value="">Select System Type</option>
+                        <option value="HMI Networks">HMI Networks</option>
+                        <option value="VFD Arrays">VFD Arrays</option>
+                        <option value="Full Automation Stack">
+                          Full Automation Stack
+                        </option>
+                        <option value="Control Panels">Control Panels</option>
+                        <option value="PLC Systems">PLC Systems</option>
+                        <option value="SCADA Systems">SCADA Systems</option>
+                      </select>
+                    </div>
+                    <div>
+                      <input
+                        type="text"
+                        name="companyName"
+                        value={maintenanceFormData.companyName}
+                        onChange={handleInputChange}
+                        placeholder="Company Name"
+                        required
+                        className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-800 text-white rounded-lg placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
+                      />
+                    </div>
+                    <div>
+                      <input
+                        type="email"
+                        name="email"
+                        value={maintenanceFormData.email}
+                        onChange={handleInputChange}
+                        placeholder="Email Address"
+                        required
+                        className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-800 text-white rounded-lg placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
+                      />
+                    </div>
+                    <div>
+                      <textarea
+                        name="maintenanceNeeds"
+                        value={maintenanceFormData.maintenanceNeeds}
+                        onChange={handleInputChange}
+                        placeholder="Tell us about your maintenance needs"
+                        rows="3"
+                        required
+                        className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-800 text-white rounded-lg placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
+                      ></textarea>
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={`w-full px-4 sm:px-6 2xl:px-8 py-2 sm:py-3 md:py-4 2xl:py-6 text-white text-sm sm:text-base 2xl:text-lg font-bold rounded-lg transition-all duration-300 transform hover:scale-[1.02] ${
+                        isSubmitting
+                          ? "bg-gray-600 cursor-not-allowed"
+                          : "bg-cyan-500 hover:bg-cyan-600"
+                      }`}
+                    >
+                      {isSubmitting ? (
+                        <div className="flex items-center justify-center">
+                          <svg
+                            className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                          Processing...
+                        </div>
+                      ) : (
+                        "Get Custom Maintenance Plan"
+                      )}
+                    </button>
+                  </form>
+                )}
               </div>
             </motion.div>
           </div>
