@@ -186,7 +186,7 @@ const Footer = ({ onNavClick }) => {
         <div className="mt-16 pt-8 border-t border-[#ECAF41]/20">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-[#ECAF41]/80">
-              © 2024 LUMORA VENTURES PVT LTD. All Rights Reserved.
+              © 2025 LUMORA VENTURES PVT LTD. All Rights Reserved.
             </p>
             <a
               href="#top"

@@ -1,7 +1,6 @@
 // src/automation/MaintenanceAgreementsPage.js
 import React from "react";
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const fadeIn = {
@@ -39,8 +38,8 @@ const MaintenanceAgreementsPage = () => {
       </Helmet>
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-24 overflow-hidden">
-        <div className="max-w-full mx-auto px-4">
+      <section className="relative pt-16 sm:pt-24 md:pt-32 2xl:pt-40 pb-12 sm:pb-16 md:pb-24 2xl:pb-32 overflow-hidden">
+        <div className="w-full mx-auto px-4 sm:px-6 md:px-8 lg:px-16 2xl:px-24">
           <motion.div
             initial="hidden"
             animate="visible"
@@ -49,55 +48,48 @@ const MaintenanceAgreementsPage = () => {
           >
             <motion.h1
               variants={slideUp}
-              className="text-5xl md:text-6xl font-black text-white mb-8 leading-tight"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl font-black text-white mb-4 sm:mb-6 md:mb-8 2xl:mb-10 leading-tight"
             >
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
                 Zero Downtime Guarantee
               </span>
               <br />
-              <span className="text-3xl md:text-4xl font-medium text-gray-300">
+              <span className="text-xl sm:text-2xl md:text-3xl lg:text-4xl 2xl:text-5xl font-medium text-gray-300">
                 Proactive Maintenance for Continuous Operations
               </span>
             </motion.h1>
 
             <motion.p
               variants={slideUp}
-              className="text-xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed"
+              className="text-base sm:text-lg md:text-xl 2xl:text-2xl text-gray-300 mb-6 sm:mb-8 md:mb-12 2xl:mb-16 max-w-3xl 2xl:max-w-5xl mx-auto leading-relaxed"
             >
               Our predictive maintenance ecosystem ensures 99.95% system
               availability through AI-driven monitoring and rapid-response
               engineering support.
             </motion.p>
 
-            <motion.div variants={slideUp}>
-              <Link
-                to="#"
-                className="px-10 py-5 bg-cyan-500 hover:bg-cyan-600 text-white font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-cyan-500/30"
-              >
-                Secure Your Operations Now →
-              </Link>
-            </motion.div>
+            {/* Removed "Secure Your Operations Now" button */}
           </motion.div>
         </div>
       </section>
 
       {/* Core Content Section */}
-      <section className="relative pb-24">
-        <div className="max-w-full mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-16">
+      <section className="relative pb-12 sm:pb-16 md:pb-24 2xl:pb-32">
+        <div className="w-full mx-auto px-4 sm:px-6 md:px-8 lg:px-16 2xl:px-24">
+          <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12 lg:gap-16 2xl:gap-20">
             {/* Maintenance Features */}
             <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
               variants={fadeIn}
-              className="space-y-12"
+              className="space-y-6 sm:space-y-8 md:space-y-12 2xl:space-y-16"
             >
-              <div className="bg-gray-800/50 p-8 rounded-2xl border border-gray-700/50 hover:border-cyan-400/30 transition-all duration-500">
-                <h2 className="text-3xl font-bold text-white mb-6">
+              <div className="bg-gray-800/50 p-4 sm:p-6 md:p-8 2xl:p-10 rounded-2xl border border-gray-700/50 hover:border-cyan-400/30 transition-all duration-500">
+                <h2 className="text-xl sm:text-2xl md:text-3xl 2xl:text-4xl font-bold text-white mb-3 sm:mb-4 md:mb-6 2xl:mb-8">
                   Smart Maintenance Framework
                 </h2>
-                <div className="space-y-8">
+                <div className="space-y-4 sm:space-y-6 md:space-y-8 2xl:space-y-10">
                   {[
                     {
                       title: "Predictive HMI Care",
@@ -120,17 +112,19 @@ const MaintenanceAgreementsPage = () => {
                   ].map((service, index) => (
                     <div
                       key={index}
-                      className="group flex items-start gap-6 p-4 bg-gray-800/30 rounded-xl hover:bg-cyan-500/10 transition-colors"
+                      className="group flex items-start gap-3 sm:gap-4 md:gap-6 2xl:gap-8 p-3 sm:p-4 2xl:p-6 bg-gray-800/30 rounded-xl hover:bg-cyan-500/10 transition-colors"
                     >
-                      <div className="w-14 h-14 bg-cyan-500/10 rounded-xl flex items-center justify-center text-2xl">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 2xl:w-16 2xl:h-16 bg-cyan-500/10 rounded-xl flex items-center justify-center text-xl sm:text-2xl 2xl:text-3xl">
                         {service.icon}
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-400">
+                        <h3 className="text-base sm:text-lg md:text-xl 2xl:text-2xl font-bold text-white mb-1 sm:mb-2 2xl:mb-3 group-hover:text-cyan-400">
                           {service.title}
                         </h3>
-                        <p className="text-gray-400 mb-2">{service.desc}</p>
-                        <div className="text-cyan-400 text-sm font-medium">
+                        <p className="text-xs sm:text-sm md:text-base 2xl:text-lg text-gray-400 mb-1 sm:mb-2 2xl:mb-3">
+                          {service.desc}
+                        </p>
+                        <div className="text-cyan-400 text-xs sm:text-sm 2xl:text-base font-medium">
                           {service.stat}
                         </div>
                       </div>
@@ -139,11 +133,11 @@ const MaintenanceAgreementsPage = () => {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-gray-800 to-blue-900/50 p-8 rounded-2xl shadow-xl">
-                <h2 className="text-2xl font-bold text-white mb-6">
+              <div className="bg-gradient-to-br from-gray-800 to-blue-900/50 p-4 sm:p-6 md:p-8 2xl:p-10 rounded-2xl shadow-xl">
+                <h2 className="text-lg sm:text-xl md:text-2xl 2xl:text-3xl font-bold text-white mb-3 sm:mb-4 md:mb-6 2xl:mb-8">
                   Response Performance
                 </h2>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4 2xl:gap-6">
                   {[
                     ["2h", "Critical Response", "Avg. Onsite Time"],
                     ["15m", "Remote Support", "First Response"],
@@ -151,13 +145,17 @@ const MaintenanceAgreementsPage = () => {
                   ].map(([value, title, sub], index) => (
                     <div
                       key={index}
-                      className="p-4 bg-gray-800/30 rounded-xl text-center hover:bg-cyan-500/10 transition-colors"
+                      className="p-2 sm:p-3 md:p-4 2xl:p-6 bg-gray-800/30 rounded-xl text-center hover:bg-cyan-500/10 transition-colors"
                     >
-                      <div className="text-cyan-400 text-3xl font-bold mb-2">
+                      <div className="text-cyan-400 text-xl sm:text-2xl md:text-3xl 2xl:text-4xl font-bold mb-1 sm:mb-2 2xl:mb-3">
                         {value}
                       </div>
-                      <div className="text-white font-medium">{title}</div>
-                      <div className="text-gray-400 text-sm">{sub}</div>
+                      <div className="text-white font-medium text-xs sm:text-sm md:text-base 2xl:text-lg">
+                        {title}
+                      </div>
+                      <div className="text-gray-400 text-xs sm:text-sm 2xl:text-base">
+                        {sub}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -166,18 +164,18 @@ const MaintenanceAgreementsPage = () => {
 
             {/* Contact Form */}
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
+              initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="space-y-12"
+              className="space-y-6 sm:space-y-8 md:space-y-12 2xl:space-y-16"
             >
-              <div className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 p-8 rounded-2xl border border-cyan-400/20">
-                <h3 className="text-2xl font-bold text-white mb-6">
+              <div className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 p-4 sm:p-6 md:p-8 2xl:p-10 rounded-2xl border border-cyan-400/20">
+                <h3 className="text-lg sm:text-xl md:text-2xl 2xl:text-3xl font-bold text-white mb-3 sm:mb-4 md:mb-6 2xl:mb-8">
                   Request More Information
                 </h3>
-                <form className="space-y-6">
+                <form className="space-y-3 sm:space-y-4 md:space-y-6 2xl:space-y-8">
                   <div>
-                    <select className="w-full px-4 py-3 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-cyan-500">
+                    <select className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg">
                       <option>Select System Type</option>
                       <option>HMI Networks</option>
                       <option>VFD Arrays</option>
@@ -188,24 +186,24 @@ const MaintenanceAgreementsPage = () => {
                     <input
                       type="text"
                       placeholder="Company Name"
-                      className="w-full px-4 py-3 bg-gray-800 text-white rounded-lg placeholder-gray-500 focus:ring-2 focus:ring-cyan-500"
+                      className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-800 text-white rounded-lg placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
                     />
                   </div>
                   <div>
                     <input
                       type="email"
                       placeholder="Email Address"
-                      className="w-full px-4 py-3 bg-gray-800 text-white rounded-lg placeholder-gray-500 focus:ring-2 focus:ring-cyan-500"
+                      className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-800 text-white rounded-lg placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
                     />
                   </div>
                   <div>
                     <textarea
                       placeholder="Tell us about your maintenance needs"
-                      rows="4"
-                      className="w-full px-4 py-3 bg-gray-800 text-white rounded-lg placeholder-gray-500 focus:ring-2 focus:ring-cyan-500"
+                      rows="3"
+                      className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-800 text-white rounded-lg placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
                     ></textarea>
                   </div>
-                  <button className="w-full px-6 py-4 bg-cyan-500 hover:bg-cyan-600 text-white font-bold rounded-lg transition-all duration-300 transform hover:scale-[1.02]">
+                  <button className="w-full px-4 sm:px-6 2xl:px-8 py-2 sm:py-3 md:py-4 2xl:py-6 bg-cyan-500 hover:bg-cyan-600 text-white text-sm sm:text-base 2xl:text-lg font-bold rounded-lg transition-all duration-300 transform hover:scale-[1.02]">
                     Get Custom Maintenance Plan
                   </button>
                 </form>
@@ -214,40 +212,6 @@ const MaintenanceAgreementsPage = () => {
           </div>
         </div>
       </section>
-
-      {/* CTA Section */}
-      <div className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 py-24">
-        <div className="max-w-6xl mx-auto px-4 text-center">
-          <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            viewport={{ once: true }}
-            className="bg-gray-900 p-12 rounded-3xl shadow-2xl border border-cyan-400/20"
-          >
-            <h2 className="text-4xl font-black text-white mb-6">
-              Operational Continuity Assured
-            </h2>
-            <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
-              Maintain 24/7 production viability with our guaranteed response
-              times and certified automation engineers
-            </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <Link
-                to="#"
-                className="px-10 py-5 bg-cyan-500 hover:bg-cyan-600 text-white font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-xl shadow-cyan-500/20"
-              >
-                Schedule Consultation
-              </Link>
-              <Link
-                to="#"
-                className="px-10 py-5 border-2 border-cyan-400/30 text-cyan-400 hover:border-cyan-400/60 font-bold rounded-xl transition-all duration-300 hover:bg-cyan-500/10"
-              >
-                Download Brochure
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </div>
     </div>
   );
 };

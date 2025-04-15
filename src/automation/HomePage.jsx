@@ -55,7 +55,7 @@ const HomePage = () => {
         {/* Animated Grid Texture */}
         <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/dark-geometric.png')]" />
 
-        <div className="max-w-full mx-auto px-4 w-full">
+        <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12">
           <motion.div
             initial="hidden"
             animate="visible"
@@ -66,20 +66,20 @@ const HomePage = () => {
             <motion.div variants={fadeIn} className="relative z-10">
               <motion.h1
                 variants={slideUp}
-                className="text-6xl md:text-7xl xl:text-8xl font-black text-white mb-10 leading-tight"
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-black text-white mb-6 sm:mb-10 2xl:mb-12 leading-tight"
               >
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
                   Industrial Evolution
                 </span>
                 <br />
-                <span className="text-5xl md:text-6xl font-medium text-gray-200">
+                <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl font-medium text-gray-200">
                   Through Smart Automation
                 </span>
               </motion.h1>
 
               <motion.p
                 variants={slideUp}
-                className="text-2xl md:text-3xl text-gray-200 mb-16 max-w-4xl mx-auto leading-relaxed"
+                className="text-lg sm:text-xl md:text-2xl lg:text-3xl 2xl:text-4xl text-gray-200 mb-8 sm:mb-12 md:mb-16 2xl:mb-20 max-w-4xl 2xl:max-w-6xl mx-auto leading-relaxed"
               >
                 Lumora Ventures delivers cutting-edge industrial automation
                 solutions that redefine productivity and operational excellence.
@@ -87,17 +87,17 @@ const HomePage = () => {
 
               <motion.div
                 variants={slideUp}
-                className="flex flex-col sm:flex-row gap-8 justify-center"
+                className="flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-8 2xl:gap-10 justify-center"
               >
                 <Link
                   to="#"
-                  className="px-12 py-6 bg-cyan-500 hover:bg-cyan-600 text-white text-xl font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-cyan-500/30"
+                  className="px-6 sm:px-8 md:px-12 2xl:px-16 py-4 sm:py-5 md:py-6 2xl:py-8 bg-cyan-500 hover:bg-cyan-600 text-white text-base sm:text-lg md:text-xl 2xl:text-2xl font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-cyan-500/30"
                 >
                   Revolutionize Your Plant →
                 </Link>
                 <Link
                   to="#"
-                  className="px-12 py-6 border-2 border-cyan-400/30 text-cyan-400 text-xl hover:border-cyan-400/60 font-bold rounded-xl transition-all duration-300 hover:bg-cyan-500/10"
+                  className="px-6 sm:px-8 md:px-12 2xl:px-16 py-4 sm:py-5 md:py-6 2xl:py-8 border-2 border-cyan-400/30 text-cyan-400 text-base sm:text-lg md:text-xl 2xl:text-2xl hover:border-cyan-400/60 font-bold rounded-xl transition-all duration-300 hover:bg-cyan-500/10"
                 >
                   Explore Solutions
                 </Link>
@@ -108,13 +108,13 @@ const HomePage = () => {
       </section>
 
       {/* Services Section */}
-      <section className="relative py-24 bg-gray-900/50 backdrop-blur-xl">
-        <div className="max-w-full mx-auto px-4">
+      <section className="relative py-12 sm:py-16 md:py-24 2xl:py-32 bg-gray-900/50 backdrop-blur-xl">
+        <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, margin: "-100px" }}
-            className="grid lg:grid-cols-3 gap-12"
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-12 2xl:gap-16"
           >
             {/* Service Cards */}
             {[
@@ -136,28 +136,19 @@ const HomePage = () => {
             ].map((service, index) => (
               <div
                 key={index}
-                className="group relative bg-gray-800/50 rounded-2xl p-10 border border-gray-700/50 hover:border-cyan-400/30 transition-all duration-500 hover:-translate-y-2"
+                className="group relative bg-gray-800/50 rounded-2xl p-6 sm:p-8 md:p-10 2xl:p-12 border border-gray-700/50 hover:border-cyan-400/30 transition-all duration-500 hover:-translate-y-2"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
                 <div className="relative z-10">
-                  <div className="text-5xl mb-8 text-cyan-400">
+                  <div className="text-3xl sm:text-4xl md:text-5xl 2xl:text-6xl mb-4 sm:mb-6 md:mb-8 2xl:mb-10 text-cyan-400">
                     {service.icon}
                   </div>
-                  <h3 className="text-3xl font-bold text-white mb-6">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl 2xl:text-4xl font-bold text-white mb-3 sm:mb-4 md:mb-6 2xl:mb-8">
                     {service.title}
                   </h3>
-                  <p className="text-xl text-gray-300 leading-relaxed mb-8">
+                  <p className="text-base sm:text-lg md:text-xl 2xl:text-2xl text-gray-300 leading-relaxed">
                     {service.desc}
                   </p>
-                  <Link
-                    to="#"
-                    className="inline-flex items-center text-xl text-cyan-400 hover:text-cyan-300 font-medium group"
-                  >
-                    Discover Capabilities
-                    <span className="ml-2 opacity-0 group-hover:opacity-100 translate-x-0 group-hover:translate-x-2 transition-all duration-300">
-                      →
-                    </span>
-                  </Link>
                 </div>
               </div>
             ))}
@@ -166,33 +157,27 @@ const HomePage = () => {
       </section>
 
       {/* CTA Section */}
-      <div className="relative py-24 bg-[url('https://www.transparenttextures.com/patterns/concrete-wall.png')]">
-        <div className="max-w-6xl mx-auto px-4 text-center">
+      <div className="relative py-12 sm:py-16 md:py-24 2xl:py-32 bg-[url('https://www.transparenttextures.com/patterns/concrete-wall.png')]">
+        <div className="max-w-6xl 2xl:max-w-7xl mx-auto px-4 text-center">
           <motion.div
             initial={{ scale: 0.95, opacity: 0 }}
             whileInView={{ scale: 1, opacity: 1 }}
             viewport={{ once: true }}
-            className="bg-gradient-to-br from-gray-900 to-blue-900/90 rounded-3xl p-16 shadow-2xl border border-cyan-400/20"
+            className="bg-gradient-to-br from-gray-900 to-blue-900/90 rounded-3xl p-6 sm:p-10 md:p-16 2xl:p-20 shadow-2xl border border-cyan-400/20"
           >
-            <h2 className="text-5xl font-black text-white mb-8">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl 2xl:text-6xl font-black text-white mb-4 sm:mb-6 md:mb-8 2xl:mb-10">
               Ready for Industry 4.0 Transformation?
             </h2>
-            <p className="text-2xl text-gray-200 mb-10 max-w-4xl mx-auto">
+            <p className="text-lg sm:text-xl md:text-2xl 2xl:text-3xl text-gray-200 mb-6 sm:mb-8 md:mb-10 2xl:mb-12 max-w-4xl 2xl:max-w-5xl mx-auto">
               Partner with Lumora Ventures to implement automation solutions
               that deliver 200% ROI within 18 months
             </p>
-            <div className="flex flex-col sm:flex-row gap-8 justify-center">
+            <div className="flex justify-center">
               <Link
                 to="#"
-                className="px-14 py-6 bg-cyan-500 hover:bg-cyan-600 text-white text-xl font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-xl shadow-cyan-500/20"
+                className="px-6 sm:px-8 md:px-14 2xl:px-16 py-3 sm:py-4 md:py-6 2xl:py-8 bg-cyan-500 hover:bg-cyan-600 text-white text-base sm:text-lg md:text-xl 2xl:text-2xl font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-xl shadow-cyan-500/20"
               >
                 Schedule Free Consultation
-              </Link>
-              <Link
-                to="#"
-                className="px-14 py-6 border-2 border-cyan-400/30 text-cyan-400 text-xl hover:border-cyan-400/60 font-bold rounded-xl transition-all duration-300 hover:bg-cyan-500/10"
-              >
-                Download Case Studies
               </Link>
             </div>
           </motion.div>
