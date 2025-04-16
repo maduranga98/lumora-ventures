@@ -282,8 +282,8 @@ const MaintenanceAgreementsPage = () => {
                         className="w-full px-3 sm:px-4 2xl:px-5 py-2 sm:py-3 2xl:py-4 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-cyan-500 text-sm sm:text-base 2xl:text-lg"
                       >
                         <option value="">Select System Type</option>
-                        <option value="HMI Networks">HMI Networks</option>
-                        <option value="VFD Arrays">VFD Arrays</option>
+                        <option value="HMI Programming">HMI Programming</option>
+                        <option value="VFD">VFD</option>
                         <option value="Full Automation Stack">
                           Full Automation Stack
                         </option>

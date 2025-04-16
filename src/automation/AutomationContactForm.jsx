@@ -13,7 +13,7 @@ const AutomationContactForm = ({ isOpen, onClose }) => {
     email: "",
     phone: "",
     companyName: "",
-    systemType: "HMI Networks",
+    systemType: "HMI Programming",
     projectDetails: "",
     urgencyLevel: "Standard",
   });
@@ -64,7 +64,7 @@ const AutomationContactForm = ({ isOpen, onClose }) => {
           email: "",
           phone: "",
           companyName: "",
-          systemType: "HMI Networks",
+          systemType: "HMI Programming",
           projectDetails: "",
           urgencyLevel: "Standard",
         });
@@ -246,8 +246,8 @@ const AutomationContactForm = ({ isOpen, onClose }) => {
                     required
                     className="w-full px-4 py-3 bg-gray-800 text-white border border-gray-700 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
                   >
-                    <option value="HMI Networks">HMI Networks</option>
-                    <option value="VFD Arrays">VFD Arrays</option>
+                    <option value="HMI Programming">HMI Programming</option>
+                    <option value="VFD">VFD</option>
                     <option value="PLC Programming">PLC Programming</option>
                     <option value="Panel Wiring">Panel Wiring</option>
                     <option value="Full Control Stack">
