@@ -6,8 +6,6 @@ import {
   ExternalLink,
   ChevronRight,
   Facebook,
-  Twitter,
-  Instagram,
   Linkedin,
 } from "lucide-react";
 import logo from "../assets/logo_new.webp";
@@ -28,10 +26,18 @@ const Footer = ({ onNavClick }) => {
   };
 
   const socialLinks = [
-    { Icon: Facebook, href: "#", color: "hover:bg-[#3D52A2]" },
-    { Icon: Twitter, href: "#", color: "hover:bg-[#3D52A2]" },
-    { Icon: Instagram, href: "#", color: "hover:bg-[#3D52A2]" },
-    { Icon: Linkedin, href: "#", color: "hover:bg-[#3D52A2]" },
+    {
+      Icon: Facebook,
+      href: "https://web.facebook.com/profile.php?id=61575034203203",
+      color: "hover:bg-[#3D52A2]",
+      label: "Facebook",
+    },
+    {
+      Icon: Linkedin,
+      href: "https://www.linkedin.com/company/lumora-ventures-pvt-ltd",
+      color: "hover:bg-[#0A66C2]",
+      label: "LinkedIn",
+    },
   ];
 
   const contactInfo = [
@@ -91,12 +97,15 @@ const Footer = ({ onNavClick }) => {
               </div>
               {/* Social Links */}
               <div className="flex gap-4">
-                {socialLinks.map(({ Icon, href }, index) => (
+                {socialLinks.map(({ Icon, href, color, label }, index) => (
                   <a
                     key={index}
                     href={href}
-                    className="p-2 rounded-lg bg-[#ECAF41]/10 backdrop-blur-sm hover:bg-[#ECAF41]/30 
-                             transition-all duration-300 hover:scale-110"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    className={`p-2 rounded-lg bg-[#ECAF41]/10 backdrop-blur-sm ${color} 
+                             transition-all duration-300 hover:scale-110`}
                   >
                     <Icon className="h-5 w-5 text-[#ECAF41]" />
                   </a>

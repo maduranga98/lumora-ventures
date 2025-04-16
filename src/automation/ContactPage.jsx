@@ -352,14 +352,18 @@ const ContactPage = () => {
                   {[
                     {
                       icon: "📞",
-                      title: "Emergency Line",
-                      detail: "+1 (555) 123-4567",
+                      title: "Contact Numbers",
+                      detail: [
+                        { number: "+1 (555) 123-4567", label: "International" },
+                        { number: "+94 76 916 4108", label: "Sri Lanka" },
+                        { number: "+94 766 206 555", label: "Sri Lanka" },
+                      ],
                       note: "24/7 for maintenance contracts",
                     },
                     {
                       icon: "📧",
                       title: "Technical Support",
-                      detail: "support@lumoraventures.com",
+                      detail: "info@lumoraventures.com",
                       note: "Response within 2 hours",
                     },
                     {
@@ -382,9 +386,29 @@ const ContactPage = () => {
                           <div className="text-base sm:text-lg 2xl:text-xl font-semibold text-white mb-1 2xl:mb-2">
                             {item.title}
                           </div>
-                          <div className="text-gray-300 whitespace-pre-line text-sm sm:text-base 2xl:text-lg">
-                            {item.detail}
-                          </div>
+                          {Array.isArray(item.detail) ? (
+                            <div className="flex flex-col gap-1 sm:gap-2">
+                              {item.detail.map((contact, idx) => (
+                                <a
+                                  key={idx}
+                                  href={`tel:${contact.number.replace(
+                                    /\s+/g,
+                                    ""
+                                  )}`}
+                                  className="text-gray-300 hover:text-cyan-400 transition-colors text-sm sm:text-base 2xl:text-lg flex items-center gap-2"
+                                >
+                                  <span>{contact.number}</span>
+                                  <span className="text-xs text-cyan-400/70">
+                                    ({contact.label})
+                                  </span>
+                                </a>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="text-gray-300 whitespace-pre-line text-sm sm:text-base 2xl:text-lg">
+                              {item.detail}
+                            </div>
+                          )}
                           <div className="text-cyan-400 text-xs sm:text-sm 2xl:text-base mt-1 sm:mt-2 2xl:mt-3">
                             {item.note}
                           </div>
@@ -401,14 +425,24 @@ const ContactPage = () => {
                 </h3>
                 <div className="grid grid-cols-2 gap-3 sm:gap-4 2xl:gap-6">
                   {[
-                    { platform: "LinkedIn", icon: "💼", url: "#" },
-                    { platform: "GitHub", icon: "👨‍💻", url: "#" },
-                    { platform: "YouTube", icon: "📹", url: "#" },
-                    { platform: "Twitter", icon: "🐦", url: "#" },
+                    {
+                      platform: "LinkedIn",
+                      icon: "💼",
+                      url: "https://www.linkedin.com/company/lumora-ventures-pvt-ltd",
+                      handle: "Lumora Ventures",
+                    },
+                    {
+                      platform: "Facebook",
+                      icon: "👍",
+                      url: "https://web.facebook.com/profile.php?id=61575034203203",
+                      handle: "Lumora Ventures",
+                    },
                   ].map((social, index) => (
                     <a
                       key={index}
                       href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="p-3 sm:p-4 2xl:p-6 bg-gray-800/30 rounded-xl hover:bg-cyan-500/10 transition-colors flex items-center gap-2 sm:gap-3 2xl:gap-4"
                     >
                       <span className="text-xl sm:text-2xl 2xl:text-3xl">
@@ -419,7 +453,7 @@ const ContactPage = () => {
                           {social.platform}
                         </div>
                         <div className="text-cyan-400 text-xs sm:text-sm 2xl:text-base">
-                          @LumoraAutomation
+                          {social.handle}
                         </div>
                       </div>
                     </a>

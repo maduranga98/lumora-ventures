@@ -5,8 +5,6 @@ import {
   Phone,
   ChevronRight,
   Facebook,
-  Twitter,
-  Instagram,
   Linkedin,
 } from "lucide-react";
 import logo from "../assets/logo_new.webp";
@@ -31,19 +29,15 @@ const Footer = ({ onNavClick }) => {
   const socialLinks = [
     {
       Icon: Facebook,
-      href: "https://facebook.com",
+      href: "https://web.facebook.com/profile.php?id=61575034203203",
       color: "hover:bg-[#3D52A2]",
-    },
-    { Icon: Twitter, href: "https://twitter.com", color: "hover:bg-[#3D52A2]" },
-    {
-      Icon: Instagram,
-      href: "https://instagram.com",
-      color: "hover:bg-[#3D52A2]",
+      label: "Facebook",
     },
     {
       Icon: Linkedin,
-      href: "https://linkedin.com",
-      color: "hover:bg-[#3D52A2]",
+      href: "https://www.linkedin.com/company/lumora-ventures-pvt-ltd",
+      color: "hover:bg-[#0A66C2]",
+      label: "LinkedIn",
     },
   ];
 
@@ -127,12 +121,13 @@ const Footer = ({ onNavClick }) => {
                 </p>
               </div>
               <div className="flex gap-4">
-                {socialLinks.map(({ Icon, href }, index) => (
+                {socialLinks.map(({ Icon, href, label }, index) => (
                   <a
                     key={index}
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label={label}
                     className="p-2 rounded-lg bg-[#ECAF41]/10 backdrop-blur-sm hover:bg-[#ECAF41]/30 transition-all duration-300 hover:scale-110"
                   >
                     <Icon className="h-5 w-5 text-[#ECAF41]" />
@@ -198,7 +193,7 @@ const Footer = ({ onNavClick }) => {
           </div>
         </div>
         <div className="mt-16 pt-8 border-t border-[#ECAF41]/20 text-center text-sm text-[#ECAF41]/80">
-          © 2024 LUMORA VENTURES PVT LTD. All Rights Reserved.
+          © 2025 LUMORA VENTURES PVT LTD. All Rights Reserved.
         </div>
       </div>
     </footer>
