@@ -1,10 +1,17 @@
-// src/automation/AutomationControlPage.js
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import AutomationContactForm from "./AutomationContactForm";
+
+// Import all images correctly
+import siemensLogo from "../assets/siemens-logo.png";
+import allenBradleyLogo from "../assets/allen-bradley-logo.png";
+import mitsubishiLogo from "../assets/mitsubishi-logo.png";
+import schneiderLogo from "../assets/schneider-logo.png";
+import scadaIcon from "../assets/scada-icon.png";
+import iotIcon from "../assets/iot-icon.png";
 
 const fadeIn = {
   hidden: { opacity: 0 },
@@ -76,6 +83,47 @@ const AutomationControlPage = () => {
     }
   };
 
+  // Data for PLC Brands and Services with correctly referenced images
+  const plcBrands = [
+    {
+      name: "Siemens",
+      logo: siemensLogo,
+      description:
+        "Expert programming for Siemens S7-1200, S7-1500, and TIA Portal systems.",
+    },
+    {
+      name: "Allen-Bradley",
+      logo: allenBradleyLogo,
+      description:
+        "Services for ControlLogix and CompactLogix PLCs with Studio 5000.",
+    },
+    {
+      name: "Mitsubishi",
+      logo: mitsubishiLogo,
+      description:
+        "Support for Mitsubishi FX and Q-series PLCs using GX Works.",
+    },
+    {
+      name: "Schneider Electric",
+      logo: schneiderLogo,
+      description: "Programming for Modicon M580 and M340 with EcoStruxure.",
+    },
+  ];
+
+  const otherServices = [
+    {
+      name: "SCADA Systems",
+      icon: scadaIcon,
+      description:
+        "Real-time monitoring and control with advanced SCADA solutions.",
+    },
+    {
+      name: "IoT Integration",
+      icon: iotIcon,
+      description: "Smart automation through IoT device integration.",
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-blue-900">
       <Helmet>
@@ -84,11 +132,11 @@ const AutomationControlPage = () => {
         </title>
         <meta
           name="description"
-          content="Boost efficiency with Lumora Ventures' automation and control systems—HMI programming, VFD programming, and panel wiring. Tailored solutions await!"
+          content="Lumora Ventures provides expert PLC programming for Siemens, Allen-Bradley, Mitsubishi, and Schneider Electric, plus SCADA and IoT integration. Boost efficiency with tailored automation solutions."
         />
         <meta
           name="keywords"
-          content="Industrial automation, control systems, HMI programming, VFD programming, panel wiring, process optimization"
+          content="Industrial automation, PLC programming, Siemens PLC, Allen-Bradley PLC, Mitsubishi PLC, Schneider Electric PLC, SCADA systems, IoT integration, HMI programming, VFD programming, panel wiring"
         />
       </Helmet>
 
@@ -206,39 +254,73 @@ const AutomationControlPage = () => {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-gray-800 to-blue-900/50 p-4 sm:p-6 md:p-8 2xl:p-10 rounded-2xl shadow-xl">
-                <h2 className="text-lg sm:text-xl md:text-2xl 2xl:text-3xl font-bold text-white mb-3 sm:mb-4 md:mb-6 2xl:mb-8">
-                  System Architecture
+              {/* New Supported PLC Brands and Services Section */}
+              <div className="bg-gray-800/50 p-4 sm:p-6 md:p-8 2xl:p-10 rounded-2xl border border-gray-700/50 hover:border-cyan-400/30 transition-all duration-500">
+                <h2 className="text-xl sm:text-2xl md:text-3xl 2xl:text-4xl font-bold text-white mb-3 sm:mb-4 md:mb-6 2xl:mb-8">
+                  Supported PLC Brands and Automation Services
                 </h2>
-                <div className="space-y-3 sm:space-y-4 md:space-y-6 2xl:space-y-8">
-                  <div className="flex items-center gap-3 sm:gap-4 2xl:gap-6 p-3 sm:p-4 2xl:p-6 bg-gray-800/30 rounded-xl">
-                    <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 2xl:w-14 2xl:h-14 bg-cyan-500/10 rounded-lg flex items-center justify-center">
-                      <span className="text-cyan-400 2xl:text-xl">📈</span>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-white text-sm sm:text-base 2xl:text-lg">
-                        Real-time KPIs
-                      </h4>
-                      <p className="text-gray-400 text-xs sm:text-sm 2xl:text-base">
-                        OEE monitoring • Energy analytics • Quality metrics
-                      </p>
-                    </div>
-                  </div>
+                <p className="text-sm sm:text-base 2xl:text-lg text-gray-400 leading-relaxed mb-4 sm:mb-6 md:mb-8 2xl:mb-10">
+                  Lumora Ventures specializes in programming and servicing
+                  leading PLC brands and offers advanced automation solutions
+                  tailored to your industry.
+                </p>
 
-                  <div className="flex items-center gap-3 sm:gap-4 2xl:gap-6 p-3 sm:p-4 2xl:p-6 bg-gray-800/30 rounded-xl">
-                    <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 2xl:w-14 2xl:h-14 bg-cyan-500/10 rounded-lg flex items-center justify-center">
-                      <span className="text-cyan-400 2xl:text-xl">🔒</span>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-white text-sm sm:text-base 2xl:text-lg">
-                        Cybersecurity
+                <h3 className="text-base sm:text-lg md:text-xl 2xl:text-2xl font-semibold text-white mb-3 sm:mb-4 md:mb-6">
+                  PLC Brands
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8 mb-8">
+                  {plcBrands.map((brand, index) => (
+                    <div
+                      key={index}
+                      className="bg-gray-900/30 p-4 sm:p-6 rounded-xl hover:bg-cyan-500/10 transition-all duration-300"
+                    >
+                      <img
+                        src={brand.logo}
+                        alt={`${brand.name} logo`}
+                        className="h-12 sm:h-14 md:h-16 mx-auto mb-3 sm:mb-4"
+                        loading="lazy"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "/api/placeholder/200/120";
+                        }}
+                      />
+                      <h4 className="text-sm sm:text-base md:text-lg 2xl:text-xl font-semibold text-white text-center mb-2">
+                        {brand.name}
                       </h4>
-                      <p className="text-gray-400 text-xs sm:text-sm 2xl:text-base">
-                        IEC 62443 compliance • Network segmentation • Threat
-                        monitoring
+                      <p className="text-xs sm:text-sm md:text-base text-gray-400 text-center">
+                        {brand.description}
                       </p>
                     </div>
-                  </div>
+                  ))}
+                </div>
+
+                <h3 className="text-base sm:text-lg md:text-xl 2xl:text-2xl font-semibold text-white mb-3 sm:mb-4 md:mb-6">
+                  Additional Services
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
+                  {otherServices.map((service, index) => (
+                    <div
+                      key={index}
+                      className="bg-gray-900/30 p-4 sm:p-6 rounded-xl hover:bg-cyan-500/10 transition-all duration-300"
+                    >
+                      <img
+                        src={service.icon}
+                        alt={`${service.name} icon`}
+                        className="h-12 sm:h-14 md:h-16 mx-auto mb-3 sm:mb-4"
+                        loading="lazy"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "/api/placeholder/200/120";
+                        }}
+                      />
+                      <h4 className="text-sm sm:text-base md:text-lg 2xl:text-xl font-semibold text-white text-center mb-2">
+                        {service.name}
+                      </h4>
+                      <p className="text-xs sm:text-sm md:text-base text-gray-400 text-center">
+                        {service.description}
+                      </p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </motion.div>
