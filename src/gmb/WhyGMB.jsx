@@ -109,8 +109,9 @@ const WhyGBPCrucial = () => {
             Unlock a Flood of Local Customers: The Undeniable Importance of GBP
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            <strong>Don't Get Left Behind!</strong> A strong GBP is your 24/7
-            online storefront and customer magnet.
+            <strong>Don't Get Left Behind!</strong>
+            <br /> A strong GBP is your 24/7 online storefront and customer
+            magnet.
           </p>
         </div>
 

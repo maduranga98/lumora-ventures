@@ -103,18 +103,18 @@ const AboutUs = ({ onNavClick }) => {
                   Who We Are
                 </h3>
                 <div className="space-y-6 text-[#09122C]/90">
-                  <p className="text-base sm:text-lg animate-fade-in stagger-1">
+                  <p className="text-base text-justify sm:text-lg animate-fade-in stagger-1">
                     At Lumora Ventures, we are passionate about empowering
                     businesses to unlock their full potential in the digital
                     age. Founded with a vision to deliver innovative solutions,
-                    we specialize in software development, digital marketing,
-                    and research-driven strategies that drive measurable
-                    success.
+                    we specialize in software development, industrial
+                    automation, digital marketing, and research-driven
+                    strategies that drive measurable success.
                   </p>
-                  <p className="text-base sm:text-lg animate-fade-in stagger-2">
-                    Our mission is simple: to provide businesses with the tools,
+                  <p className="text-base text-justify sm:text-lg animate-fade-in stagger-2">
+                    Our mission is to equip businesses with the tools,
                     technologies, and strategies they need to streamline
-                    operations, enhance customer engagement, and achieve
+                    operations, enhance customer engagement, and drive
                     sustainable growth.
                   </p>
                 </div>

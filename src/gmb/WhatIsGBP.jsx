@@ -75,7 +75,7 @@ const WhatIsGBP = () => {
               looking for businesses like yours.
             </p>
             <p
-              className="text-lg leading-relaxed"
+              className="text-xl leading-relaxed"
               style={{ color: theme.colors.text.secondary }}
             >
               When someone searches "coffee shop near me" or your business name,

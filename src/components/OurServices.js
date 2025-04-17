@@ -32,7 +32,7 @@ const Services = ({ onNavClick }) => {
       title: "Salon Management Solutions",
       icon: Scissors,
       description:
-        "Revolutionize your salon operations with our All-in-One Salon Management System. Whether you run a small boutique salon or a large chain, our software is designed to handle every aspect of your business effortlessly.",
+        "Revolutionize your salon operations with our all-in-one Salon Management System. Whether you run a boutique salon or a large chain, our software is designed to streamline every aspect of your business effortlessly.",
       details:
         "From appointment scheduling to inventory management, employee payroll, and customer feedback, our system provides everything you need to streamline operations and enhance customer satisfaction.",
       benefits: [
@@ -129,14 +129,16 @@ const Services = ({ onNavClick }) => {
                         {service.title}
                       </h3>
                     </div>
-                    <p className="text-[#09122C]/90 mb-4">
+                    <p className="text-[#09122C]/90 mb-4 text-justify">
                       {service.description}
                     </p>
                   </div>
 
                   {/* Service Details */}
                   <div className="p-6 bg-[#F0F4FF]/50">
-                    <p className="text-[#09122C]/90 mb-6">{service.details}</p>
+                    <p className="text-[#09122C]/90 mb-6 text-justify">
+                      {service.details}
+                    </p>
 
                     {/* Benefits */}
                     <div className="space-y-3 mb-6">
