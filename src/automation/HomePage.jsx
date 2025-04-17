@@ -139,12 +139,12 @@ const HomePage = () => {
               },
               {
                 title: "R&D Innovation Labs",
-                desc: "Future-proof automation technologies and system optimization R&D",
+                desc: "Future-proof automation technologies and system optimization R&D.",
                 icon: "🔬",
               },
               {
                 title: "Proactive Maintenance",
-                desc: "24/7 monitoring and predictive maintenance agreements",
+                desc: "24/7 monitoring and predictive maintenance agreements.",
                 icon: "🛡️",
               },
             ].map((service, index) => (
@@ -184,7 +184,7 @@ const HomePage = () => {
             </h2>
             <p className="text-lg sm:text-xl md:text-2xl 2xl:text-3xl text-gray-200 mb-6 sm:mb-8 md:mb-10 2xl:mb-12 max-w-4xl 2xl:max-w-5xl mx-auto">
               Partner with Lumora Ventures to implement automation solutions
-              that deliver 200% ROI within 18 months
+              that deliver up to 200% ROI within 18 months.
             </p>
             <div className="flex justify-center">
               <button

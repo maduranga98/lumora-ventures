@@ -184,7 +184,7 @@ const WhyChooseLumora = ({ onNavClick }) => {
                   "100% transparent reporting and communication",
                   "Regular optimization updates based on performance",
                   "Quick response times (24 hours or less)",
-                  "No long-term contracts - stay because you want to",
+                  "No long-term contracts — you stay because you want to.",
                   "Satisfaction guarantee or your money back",
                 ].map((guarantee, index) => (
                   <li key={index} className="flex items-start">

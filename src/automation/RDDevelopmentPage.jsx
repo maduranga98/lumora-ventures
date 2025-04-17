@@ -171,12 +171,12 @@ const RDDevelopmentPage = () => {
                 <div className="space-y-3 sm:space-y-4 md:space-y-6 2xl:space-y-8">
                   {[
                     [
-                      "1. Discovery Phase",
+                      "Discovery Phase",
                       "Requirements analysis & technology scouting",
                     ],
-                    ["2. Concept Design", "System architecture & simulation"],
-                    ["3. Prototyping", "Hardware-in-loop testing"],
-                    ["4. Validation", "Industrial environment trials"],
+                    ["Concept Design", "System architecture & simulation"],
+                    ["Prototyping", "Hardware-in-loop testing"],
+                    ["Validation", "Industrial environment trials"],
                   ].map(([title, desc], index) => (
                     <div
                       key={index}
